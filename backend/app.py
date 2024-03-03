@@ -25,9 +25,6 @@ class Event(db.Model):
     def __init__(self, description):
         self.description=description
 
-
-
-
 def format_event(event):
     return {
         "description":event.description,
@@ -40,13 +37,49 @@ def format_event(event):
 def home():
     return 'hello world'
 
-@app.route('/event', methods=['POST'])
+
+# create an event 
+@app.route('/events', methods=['POST'])
 def create_event():
     description=request.json['description']
     event= Event(description)
     db.session.add(event)
     db.session.commit()
     return format_event(event)
+
+# get all events, dont need 'GET'; set by default
+@app.route('/events', methods=['GET'])
+def get_events():
+    events=Event.query.order_by(Event.id.asc()).all()
+    event_list=[]
+    for event in events:
+        event_list.append(format_event(event))
+    return {'events':event_list}
+
+# get single event
+@app.route('/event/<id>', methods=['GET'])
+def get_event(id):
+    event=Event.query.filter_by(id=id).one()
+    formatted_event=format_event(event)
+    return {'event':formatted_event}
+
+# delete event 
+@app.route('/event/<id>', methods=['DELETE'])
+def delete_event(id):
+    event=Event.query.filter_by(id=id).one()
+    db.session.delete(event)
+    db.session.commit()
+    return f'Event (id:{id}) deleted'
+
+
+# update event 
+@app.route('/events/<id>', methods=['PUT'])
+def update_event(id):
+    event=Event.query.filter_by(id=id)
+    description=request.json['description']
+    event.update(dict(description=description, created_at=datetime.utcnow()))
+    db.session.commit()
+    return {'event':format_event(event.one())}
 
 
 
