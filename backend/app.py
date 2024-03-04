@@ -19,33 +19,33 @@ class RSVPEnum(Enum):
     NO = 'no'
     MAYBE = 'maybe'
     PENDING = 'pending'
-
 class GenderEnum(Enum):
     MALE = 'male'
     FEMALE = "female"
+
 
 class Guests(db.Model):
     __tablename__ = 'guests'
     id=db.Column(db.Integer, primary_key=True)
     notes=db.Column(db.String(100), nullable=False)
     firstName=db.Column(db.String(20), nullable=False)
-    lastName=db.Column(db.String(20), nullable=False)
     gender=db.Column(db.Enum(GenderEnum), nullable=False)
+    lastName=db.Column(db.String(20), nullable=False)
     age=db.Column(db.Integer, nullable=False)
     amountDue=db.Column(db.Integer, nullable=False)
     RSVP = db.Column(db.Enum(RSVPEnum), nullable=False)
     created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<Guest(id={self.id}, notes={self.notes}, RSVP={self.RSVP}, gender={self.gender}, created_at={self.created_at})>"
+        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at})>"
 
-    def __init__(self, notes, firstName, lastName, gender, age, amountDue, RSVP):
+    def __init__(self, notes, firstName, lastName, age, amountDue, RSVP, gender):
         self.notes = notes
         self.firstName = firstName
         self.lastName = lastName
-        self.gender = gender
         self.age = age
         self.amountDue = amountDue
+        self.gender = gender
         self.RSVP = RSVP
 
 def format_event(guests):
@@ -55,10 +55,10 @@ def format_event(guests):
         'created_at': guests.created_at,
         'firstName': guests.firstName,
         'lastName': guests.lastName, 
-        'gender': guests.gender,
         'age': guests.age,
         'amountDue': guests.amountDue,
-        'RSVP': guests.RSVP
+        'gender': guests.gender.value,
+        'RSVP': guests.RSVP.value
     }
 
 
@@ -74,13 +74,13 @@ def create_event():
     app.logger.info(f"Received payload: {data}")
 
     # Extracting data from the request
-    notes = data.get('notes')
-    firstName = data.get('firstName')
-    lastName = data.get('lastName')
-    gender = data.get('gender')
-    age = data.get('age')
-    amountDue = data.get('amountDue')
-    RSVP = data.get('RSVP')
+    notes = data['notes']
+    firstName = data['firstName']
+    lastName = data['lastName']
+    age = data['age']
+    amountDue = data['amountDue']
+    RSVP = data['RSVP']
+    gender = data['gender']
 
     # Creating a new guest instance
     new_guest = Guests(
@@ -95,7 +95,7 @@ def create_event():
 
     db.session.add(new_guest)
     db.session.commit()
-    return format_event(event)
+    return format_event(new_guest)
 
 # get all events, dont need 'GET'; set by default
 # @app.route('/events', methods=['GET'])
