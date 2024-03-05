@@ -78,7 +78,7 @@ def home():
     return 'hello world'
 
 
-# create an event 
+# create a guest 
 @app.route('/guests', methods=['POST'])
 def create_event():
     data = request.json
@@ -106,7 +106,12 @@ def create_event():
 
     db.session.add(new_guest)
     db.session.commit()
-    return format_guest(new_guest)
+    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guest_list=[]
+    for guest in guests:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
+
 
 # get all events, dont need 'GET'; set by default
 @app.route('/guests', methods=['GET'])
@@ -149,10 +154,13 @@ def update_event(id):
         guest_to_update.age = data.get('age', guest_to_update.age)
         guest_to_update.amountDue = data.get('amountDue', guest_to_update.amountDue)
         guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
-
         db.session.commit()
+        guests=Guests.query.order_by(Guests.id.asc()).all()
+        guest_list=[]
+        for guest in guests:
+            guest_list.append(format_guest(guest))
+        return {'guests':guest_list}
 
-        return format_guest(guest_to_update)
     return {"error": "Guest not found"}, 404
 
 

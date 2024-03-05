@@ -8,11 +8,11 @@ import Guest from "./guest/page";
 export type Guest = {
   firstName: string;
   lastName: string;
-  gender: "male" | "female";
+  gender: "MALE" | "FEMALE";
   age: number;
   amountDue: number;
-  RSVP:'yes'|'no'|'maybe'|'pending';
-  id:number,
+  RSVP:'YES'|'NO'|'MAYBE'|'PENDING';
+  id?:number,
   notes:string,
 };
 export type GlobalContent = {

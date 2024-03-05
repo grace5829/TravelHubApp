@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useContext } from "react";
-import { GuestsContext } from "../page";
+import { useContext, useState } from "react";
+import { Guest, GuestsContext } from "../page";
+import SidePanel from "./sidePanel";
 
 const TableWrapper = styled.span`
 margin: 10px;
@@ -9,7 +10,7 @@ flex-wrap: wrap;
 `;
 const EachGuest = styled.div`
 display: grid;
-grid-template-columns: 30px 200px 100px 60px 100px 100px 250px 50px;
+grid-template-columns: 30px 200px 100px 60px 100px 100px 250px 50px 50px;
 `;
 const EachGuestInfo = styled.span`
 border: 1.5px solid black;
@@ -18,8 +19,9 @@ justify-content: center;
 `;
 export default function Table() {
     const { guests, setGuests } = useContext(GuestsContext);
-
-    const removeGuest= async (id:number)=>{
+    const [sidePanel, setSidePanel] =useState(false)
+    const [currentGuest, setCurrentGuest] =useState<Guest | null>(null)
+    const removeGuest= async (id:number|undefined)=>{
             try {
               const response = await fetch(`http://127.0.0.1:5000/guest/${id}`, {
                 method: 'DELETE',  // Use the appropriate HTTP method
@@ -40,9 +42,14 @@ export default function Table() {
             }
           };
     
-    console.log(guests)
+const edit= (guest:Guest)=>{
+    setSidePanel(!sidePanel) 
+    setCurrentGuest(guest)
+}
 
     return (
+        <div>
+
         <TableWrapper>
         <EachGuest>
           <EachGuestInfo>#</EachGuestInfo>
@@ -55,8 +62,8 @@ export default function Table() {
         </EachGuest>
 
         {guests.length>0? guests.map((guest, index) => (
-          <EachGuest key={guest.lastName + guest.firstName}>
-            <EachGuestInfo>{guest.id}</EachGuestInfo>
+          <EachGuest key={guest.id}>
+            <EachGuestInfo>{index}</EachGuestInfo>
             <EachGuestInfo>
               {guest.firstName} {guest.lastName}
             </EachGuestInfo>
@@ -66,9 +73,13 @@ export default function Table() {
             <EachGuestInfo>${guest.amountDue}</EachGuestInfo>
             <EachGuestInfo>{guest.notes}</EachGuestInfo>
             <button onClick={()=>removeGuest(guest.id)}>-</button>
+            <button onClick={()=>edit(guest)}>edit</button>
           </EachGuest>
         )) : 'no guest'}
       </TableWrapper>
+      {sidePanel? <SidePanel setHidden={setSidePanel} hidden={sidePanel} currentGuest={currentGuest} setCurrentGuest={setCurrentGuest}/> : <div> false</div>}
+      </div>
+
     );
   }
   
