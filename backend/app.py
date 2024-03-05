@@ -48,7 +48,7 @@ class Guests(db.Model):
         self.gender = gender
         self.RSVP = RSVP
 
-def format_event(guests):
+def format_guest(guests):
     return {
         "notes":guests.notes,
         'id': guests.id,
@@ -95,42 +95,51 @@ def create_event():
 
     db.session.add(new_guest)
     db.session.commit()
-    return format_event(new_guest)
+    return format_guest(new_guest)
 
 # get all events, dont need 'GET'; set by default
-# @app.route('/events', methods=['GET'])
-# def get_events():
-#     events=Event.query.order_by(Event.id.asc()).all()
-#     event_list=[]
-#     for event in events:
-#         event_list.append(format_event(event))
-#     return {'events':event_list}
+@app.route('/guests', methods=['GET'])
+def get_events():
+    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guest_list=[]
+    for guest in guests:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
 
 # get single event
-# @app.route('/event/<id>', methods=['GET'])
-# def get_event(id):
-#     event=Event.query.filter_by(id=id).one()
-#     formatted_event=format_event(event)
-#     return {'event':formatted_event}
+@app.route('/guest/<id>', methods=['GET'])
+def get_event(id):
+    guest=Guests.query.filter_by(id=id).one()
+    formatted_guest=format_guest(guest)
+    return {'guest':formatted_guest}
 
 # delete event 
-# @app.route('/event/<id>', methods=['DELETE'])
-# def delete_event(id):
-#     event=Event.query.filter_by(id=id).one()
-#     db.session.delete(event)
-#     db.session.commit()
-#     return f'Event (id:{id}) deleted'
+@app.route('/guest/<id>', methods=['DELETE'])
+def delete_event(id):
+    guest=Guests.query.filter_by(id=id).one()
+    db.session.delete(guest)
+    db.session.commit()
+    return f'Event (id:{id}) deleted'
 
 
 # update event 
-# @app.route('/events/<id>', methods=['PUT'])
-# def update_event(id):
-#     event=Event.query.filter_by(id=id)
-#     description=request.json['description']
-#     event.update(dict(description=description, created_at=datetime.utcnow()))
-#     db.session.commit()
-#     return {'event':format_event(event.one())}
+@app.route('/guests/<id>', methods=['PUT'])
+def update_event(id):
+    data = request.json
+    guest_to_update = Guests.query.get(id)
 
+    if guest_to_update:
+        guest_to_update.notes = data.get('notes', guest_to_update.notes)
+        guest_to_update.firstName = data.get('firstName', guest_to_update.firstName)
+        guest_to_update.lastName = data.get('lastName', guest_to_update.lastName)
+        guest_to_update.age = data.get('age', guest_to_update.age)
+        guest_to_update.amountDue = data.get('amountDue', guest_to_update.amountDue)
+        guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
+
+        db.session.commit()
+
+        return format_guest(guest_to_update)
+    return {"error": "Guest not found"}, 404
 
 
 if __name__=='__main__':
