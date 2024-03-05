@@ -3,12 +3,23 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from enum import Enum
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_password = os.getenv("DATABASE_PASSWORD")
+
 
 app= Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://gracegao:9455@localhost/TravelHub'
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://gracegao:{db_password}@localhost/TravelHub'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 CORS(app)
+
+
+
+
 
 # to load the db 
 # new terminal, cd to correct folder, type python and enter, run "from app import db,app" ,
