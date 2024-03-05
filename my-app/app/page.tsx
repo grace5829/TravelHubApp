@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createContext } from "react";
-import Form from "./form";
+import Form from "./guest/form";
+import Guest from "./guest/page";
 
 
 export type Guest = {
@@ -10,44 +11,56 @@ export type Guest = {
   gender: "male" | "female";
   age: number;
   amountDue: number;
-  RSVP:'yes'|'no'|'maybe'|'pending'
+  RSVP:'yes'|'no'|'maybe'|'pending';
+  id:number,
+  notes:string,
 };
 export type GlobalContent = {
-  guests: Array<Guest> | null;
-  setGuests: React.Dispatch<React.SetStateAction<Guest[]>> | null;
+  guests: Array<Guest> ;
+  setGuests: React.Dispatch<React.SetStateAction<Guest[]>>;
 };
 
+
+
 export const GuestsContext = createContext<GlobalContent>({
-  guests: null,
+  guests: [],
   setGuests: () => {},
 });
 
+
 export default function Home() {
-  const [guests, setGuests] = useState<Array<Guest>>([
-    {
-      firstName: "Person",
-      lastName: "1",
-      gender: "female",
-      age: 27,
-      amountDue: 100,
-      RSVP:'pending'
-    },
-    {
-      firstName: "Person",
-      lastName: "2",
-      gender: "male",
-      age: 23,
-      amountDue: 0,
-      RSVP:'pending'
-    },
-  ]);
+  const [guests, setGuests] = useState<Array<Guest> >([]);
+  const [data, setData] = useState(null);
+
   const contextValue: GlobalContent = {
     guests,
     setGuests,
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/guests', {
+          method: 'GET',  // Use the appropriate HTTP method
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const result = await response.json();
+        setGuests(result.guests);
+      } catch (error:any) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
+    fetchData();
+  }, []); 
+
+
   return (
     <GuestsContext.Provider value={contextValue}>
-      <Form/>
+      <Guest/>
     </GuestsContext.Provider>
   );
 }

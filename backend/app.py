@@ -130,8 +130,11 @@ def delete_event(id):
     guest=Guests.query.filter_by(id=id).one()
     db.session.delete(guest)
     db.session.commit()
-    return f'Event (id:{id}) deleted'
-
+    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guest_list=[]
+    for guest in guests:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
 
 # update event 
 @app.route('/guests/<id>', methods=['PUT'])

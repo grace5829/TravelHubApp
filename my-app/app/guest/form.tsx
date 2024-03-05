@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import styled from "styled-components";
-import { Guest, GuestsContext } from "./page";
+import { Guest, GuestsContext } from "../page";
 
-const FormWrapper = styled.div`
+const FormWrapper = styled.form`
   display: grid;
   grid-template-columns: 170px 170px 170px 170px;
   row-gap: 10px;
@@ -37,8 +37,7 @@ export default function Form() {
 
   return (
     <div>
-      <FormWrapper >
-        <form onSubmit={handleSubmit}>
+        <FormWrapper onSubmit={handleSubmit}>
           <label htmlFor="firstName">
             First Name:
             <input
@@ -95,7 +94,6 @@ export default function Form() {
               <option value="maybe">Maybe</option>
             </select>
           </label>
-        </form>
         <input type="submit" />
       </FormWrapper>
 

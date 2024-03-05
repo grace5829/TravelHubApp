@@ -1,9 +1,11 @@
+import Form from "./form";
+import Table from "./table";
 
 export default function Guest() {
-    return (
-      <main >
-  Guest page
-      </main>
-    );
-  }
-  
+  return (
+    <main>
+      <Form />
+      <Table />
+    </main>
+  );
+}
