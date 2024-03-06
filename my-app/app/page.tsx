@@ -30,7 +30,6 @@ export const GuestsContext = createContext<GlobalContent>({
 
 export default function Home() {
   const [guests, setGuests] = useState<Array<Guest> >([]);
-  const [data, setData] = useState(null);
 
   const contextValue: GlobalContent = {
     guests,
@@ -41,7 +40,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await fetch('http://127.0.0.1:5000/guests', {
-          method: 'GET',  // Use the appropriate HTTP method
+          method: 'GET',
         });
 
         if (!response.ok) {
