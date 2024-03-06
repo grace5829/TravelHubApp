@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import Form from "./guest/form";
 import Guest from "./guest/page";
-
 
 export type Guest = {
   firstName: string;
@@ -11,25 +9,22 @@ export type Guest = {
   gender: "MALE" | "FEMALE";
   age: number;
   amountDue: number;
-  RSVP:'YES'|'NO'|'MAYBE'|'PENDING';
-  id?:number,
-  notes:string,
+  RSVP: "YES" | "NO" | "MAYBE" | "PENDING";
+  id?: number;
+  notes: string;
 };
 export type GlobalContent = {
-  guests: Array<Guest> ;
+  guests: Array<Guest>;
   setGuests: React.Dispatch<React.SetStateAction<Guest[]>>;
 };
-
-
 
 export const GuestsContext = createContext<GlobalContent>({
   guests: [],
   setGuests: () => {},
 });
 
-
 export default function Home() {
-  const [guests, setGuests] = useState<Array<Guest> >([]);
+  const [guests, setGuests] = useState<Array<Guest>>([]);
 
   const contextValue: GlobalContent = {
     guests,
@@ -39,27 +34,26 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/guests', {
-          method: 'GET',
+        const response = await fetch("http://127.0.0.1:5000/guests", {
+          method: "GET",
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
 
         const result = await response.json();
         setGuests(result.guests);
-      } catch (error:any) {
-        console.error('Error fetching data:', error.message);
+      } catch (error: any) {
+        console.error("Error fetching data:", error.message);
       }
     };
     fetchData();
-  }, []); 
-
+  }, []);
 
   return (
     <GuestsContext.Provider value={contextValue}>
-      <Guest/>
+      <Guest />
     </GuestsContext.Provider>
   );
 }

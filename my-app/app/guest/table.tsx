@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import styled from "styled-components";
 import { useContext, useState } from "react";
 import { Guest, GuestsContext } from "../page";
@@ -6,6 +6,7 @@ import SidePanel from "./sidePanel";
 
 const TableWrapper = styled.span`
   margin: 10px;
+  display:flex;
   justify-content: center;
   flex-wrap: wrap;
 `;
@@ -30,7 +31,7 @@ export default function Table() {
     RSVP: "PENDING",
     notes: "",
   });
-  
+
   const removeGuest = async (id: number | undefined) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/guest/${id}`, {
@@ -96,9 +97,7 @@ export default function Table() {
           setCurrentGuest={setCurrentGuest}
           method="PUT"
         />
-      ) : (
-        <div> false</div>
-      )}
+      ) : null}
     </div>
   );
 }

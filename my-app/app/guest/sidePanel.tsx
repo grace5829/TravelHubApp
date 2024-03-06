@@ -7,7 +7,7 @@ const SidePanels = styled.span`
   z-index: 1;
   width: 30vw;
   padding: 10px;
-  background: red;
+  background: gray;
   position: fixed;
   height: 100vh;
   right: 0;
@@ -82,7 +82,6 @@ export default function SidePanel({
     setHidden(!hidden);
   };
 
-  console.log(currentGuest)
   return (
     <SidePanels>
         <button onClick={()=>setHidden(!hidden)}>X</button>
@@ -145,7 +144,7 @@ export default function SidePanel({
           </select>
         </label>
         <label htmlFor="RSVP">
-          RSVP: {currentGuest.RSVP}
+          RSVP: 
           <select id="RSVP" name="RSVP" onChange={handleChange} defaultValue={currentGuest.RSVP.toUpperCase()}>
             <option value="PENDING">Pending</option>
             <option value="YES">Yes</option>
