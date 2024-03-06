@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
+"use client"
+import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import { Guest, GuestsContext } from "../page";
 import React from "react";
@@ -21,17 +22,17 @@ export default function SidePanel({
   setHidden,
   hidden,
   currentGuest,
-  setCurrentGuest
+  setCurrentGuest,
+  method
 }: {
     setHidden: React.Dispatch<React.SetStateAction<boolean>>;
     hidden: boolean;
-    currentGuest:Guest|null;
-    setCurrentGuest:React.Dispatch<React.SetStateAction<Guest | null>>
+    currentGuest:Guest;
+    setCurrentGuest:React.Dispatch<React.SetStateAction<Guest>>;
+    method:string
 }) {
-
-  console.log("setAddGuest:", setHidden);
-  console.log("addGuest:", hidden);
   const { guests, setGuests } = useContext(GuestsContext);
+  
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -42,9 +43,15 @@ export default function SidePanel({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let API
+    if(method==='POST'){
+       API=`http://127.0.0.1:5000/guests`
+    } else {
+         API=`http://127.0.0.1:5000/guests/${currentGuest.id}`
+    }
     try {
-      const response = await fetch(`http://127.0.0.1:5000/guests`, {
-        method: "POST",
+      const response = await fetch(API, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,10 +67,25 @@ export default function SidePanel({
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }
+
+    if (method==='POST'){
+        setCurrentGuest({
+            firstName: "",
+            lastName: "",
+            gender: "FEMALE",
+            age: 0,
+            amountDue: 0,
+            RSVP: "PENDING",
+            notes: "",
+          })
+    }
     setHidden(!hidden);
   };
+
+  console.log(currentGuest)
   return (
     <SidePanels>
+        <button onClick={()=>setHidden(!hidden)}>X</button>
       <FormWrapper onSubmit={handleSubmit}>
         <label htmlFor="firstName">
           First Name:
@@ -117,14 +139,14 @@ export default function SidePanel({
         </label>
         <label htmlFor="gender">
           Gender:
-          <select id="gender" name="gender" onChange={handleChange}>
+          <select id="gender" name="gender" onChange={handleChange} defaultValue={currentGuest.gender.toUpperCase()}>
             <option value="FEMALE">Female</option>
             <option value="MALE">Male</option>
           </select>
         </label>
         <label htmlFor="RSVP">
-          RSVP:
-          <select id="RSVP" name="RSVP" onChange={handleChange}>
+          RSVP: {currentGuest.RSVP}
+          <select id="RSVP" name="RSVP" onChange={handleChange} defaultValue={currentGuest.RSVP.toUpperCase()}>
             <option value="PENDING">Pending</option>
             <option value="YES">Yes</option>
             <option value="NO">No</option>

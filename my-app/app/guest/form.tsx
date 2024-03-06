@@ -1,3 +1,4 @@
+"use client"
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import styled from "styled-components";
 import { Guest, GuestsContext } from "../page";
@@ -6,7 +7,7 @@ import React from "react";
 
 export default function Form() {
   const [addGuest, setAddGuest] = useState<boolean>(false);
-  const [currentGuest, setCurrentGuest] =useState<Guest | null>({
+  const [currentGuest, setCurrentGuest] =useState<Guest>({
     firstName: "",
     lastName: "",
     gender: "FEMALE",
@@ -19,7 +20,7 @@ export default function Form() {
   return (
     <div>
       {addGuest ? (
-        <SidePanel setHidden={setAddGuest} hidden={addGuest} currentGuest={currentGuest} setCurrentGuest={setCurrentGuest}/>
+        <SidePanel setHidden={setAddGuest} hidden={addGuest} currentGuest={currentGuest} setCurrentGuest={setCurrentGuest}  method="POST"/>
       ) : (
         <button onClick={() => setAddGuest(!addGuest)}> Add Guest</button>
       )}
