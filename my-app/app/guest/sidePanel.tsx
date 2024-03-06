@@ -90,7 +90,6 @@ export default function SidePanel({
           First Name:
           <input
             type="text"
-            id="firstName"
             name="firstName"
             value={currentGuest?.firstName}
             onChange={handleChange}
@@ -100,7 +99,6 @@ export default function SidePanel({
           Last Name:
           <input
             type="text"
-            id="firstName"
             name="lastName"
             value={currentGuest?.lastName}
             onChange={handleChange}
@@ -110,7 +108,6 @@ export default function SidePanel({
           Age:
           <input
             type="number"
-            id="age"
             name="age"
             value={currentGuest?.age}
             onChange={handleChange}
@@ -120,7 +117,6 @@ export default function SidePanel({
           Amount Due:
           <input
             type="number"
-            id="amountDue"
             name="amountDue"
             value={currentGuest?.amountDue}
             onChange={handleChange}
@@ -130,7 +126,6 @@ export default function SidePanel({
           Notes:
           <input
             type="text"
-            id="notes"
             name="notes"
             value={currentGuest?.notes}
             onChange={handleChange}
@@ -138,14 +133,14 @@ export default function SidePanel({
         </label>
         <label htmlFor="gender">
           Gender:
-          <select id="gender" name="gender" onChange={handleChange} defaultValue={currentGuest.gender.toUpperCase()}>
+          <select name="gender" onChange={handleChange} defaultValue={currentGuest.gender.toUpperCase()}>
             <option value="FEMALE">Female</option>
             <option value="MALE">Male</option>
           </select>
         </label>
         <label htmlFor="RSVP">
           RSVP: 
-          <select id="RSVP" name="RSVP" onChange={handleChange} defaultValue={currentGuest.RSVP.toUpperCase()}>
+          <select name="RSVP" onChange={handleChange} defaultValue={currentGuest.RSVP.toUpperCase()}>
             <option value="PENDING">Pending</option>
             <option value="YES">Yes</option>
             <option value="NO">No</option>
