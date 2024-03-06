@@ -68,8 +68,8 @@ def format_guest(guests):
         'lastName': guests.lastName, 
         'age': guests.age,
         'amountDue': guests.amountDue,
-        'gender': guests.gender.value,
-        'RSVP': guests.RSVP.value
+        'gender': guests.gender.value.upper(),
+        'RSVP': guests.RSVP.value.upper()
     }
 
 
@@ -154,6 +154,7 @@ def update_event(id):
         guest_to_update.age = data.get('age', guest_to_update.age)
         guest_to_update.amountDue = data.get('amountDue', guest_to_update.amountDue)
         guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
+        guest_to_update.gender = data.get('gender', guest_to_update.gender)
         db.session.commit()
         guests=Guests.query.order_by(Guests.id.asc()).all()
         guest_list=[]
