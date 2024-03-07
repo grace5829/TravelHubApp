@@ -7,15 +7,19 @@ import SidePanel from "./sidePanel";
 const TableWrapper = styled.span`
   margin: 10px;
   display:flex;
-  justify-content: center;
-  flex-wrap: wrap;
+//   justify-content: center;
+//   flex-wrap: wrap;
 `;
 const EachGuest = styled.div`
-  display: grid;
-  grid-template-columns: 30px 200px 100px 60px 100px 100px 250px 50px 50px;
+box-shadow: 5px 5px 5px gray;
+border-radius:5px;
+margin: 8px;
+padding:6px;
+background:#F7F4F2;
 `;
 const EachGuestInfo = styled.span`
-  border: 1.5px solid black;
+//   border: 1.5px solid black;
+padding:2px;
   display: flex;
   justify-content: center;
 `;
@@ -61,30 +65,23 @@ export default function Table() {
   return (
     <div>
       <TableWrapper>
-        <EachGuest>
-          <EachGuestInfo>#</EachGuestInfo>
-          <EachGuestInfo>Name</EachGuestInfo>
-          <EachGuestInfo>RSVP</EachGuestInfo>
-          <EachGuestInfo>Age</EachGuestInfo>
-          <EachGuestInfo>Gender</EachGuestInfo>
-          <EachGuestInfo>Amount Due</EachGuestInfo>
-          <EachGuestInfo>Notes</EachGuestInfo>
-        </EachGuest>
 
         {guests.length > 0
           ? guests.map((guest, index) => (
               <EachGuest key={guest.id}>
-                <EachGuestInfo>{index}</EachGuestInfo>
-                <EachGuestInfo>
-                  {guest.firstName} {guest.lastName}
-                </EachGuestInfo>
-                <EachGuestInfo>{guest.RSVP}</EachGuestInfo>
-                <EachGuestInfo>{guest.age} </EachGuestInfo>
-                <EachGuestInfo>{guest.gender}</EachGuestInfo>
-                <EachGuestInfo>${guest.amountDue}</EachGuestInfo>
-                <EachGuestInfo>{guest.notes}</EachGuestInfo>
+                <button>+</button>
                 <button onClick={() => removeGuest(guest.id)}>-</button>
                 <button onClick={() => edit(guest)}>edit</button>
+                <span>#{index}</span>
+                <EachGuestInfo>
+                 <h3> {guest.firstName} {guest.lastName}</h3>
+                </EachGuestInfo>
+                <EachGuestInfo>{guest.gender}</EachGuestInfo>
+                <EachGuestInfo>Age: {guest.age} </EachGuestInfo>
+                <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
+                <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
+                <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
+
               </EachGuest>
             ))
           : "no guest"}
