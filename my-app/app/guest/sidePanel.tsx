@@ -8,8 +8,8 @@ const SidePanels = styled.span`
   width: 30vw;
   padding: 10px;
   background: gray;
-  position: fixed;
   height: 100vh;
+  position: fixed;
   right: 0;
   top: 0;
 `;

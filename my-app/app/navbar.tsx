@@ -1,14 +1,22 @@
 import Link from "next/link";
+import styled from "styled-components";
+
+const IndividualLink = styled(Link)`
+  padding: 5px;
+  text-decoration: none;
+  color:black;
+  font-family: fantasy;
+font-weight: bold;
+font-size: 20px;
+
+`;
+
 
 export default function NavBar() {
   return (
-    <div>
-      <div>
-        <Link href="/">Home</Link>
-      </div>
-      <div>
-        <Link href="/guest">Guest List</Link>
-      </div>
-    </div>
+    <span>
+        <IndividualLink href="/">Home</IndividualLink>
+        <IndividualLink href="/guest">Guest List</IndividualLink>
+    </span>
   );
 }
