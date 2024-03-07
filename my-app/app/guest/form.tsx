@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-import { Guest } from "../page";
+import { Guest } from "../layout";
 import SidePanel from "./sidePanel";
 import React from "react";
 

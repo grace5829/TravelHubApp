@@ -1,29 +1,26 @@
 "use client";
 import styled from "styled-components";
 import { useContext, useState } from "react";
-import { Guest, GuestsContext } from "../page";
+import { Guest, GuestsContext } from "../layout";
 import SidePanel from "./sidePanel";
 
 const TableWrapper = styled.span`
   margin: 10px;
-  display:flex;
-//   justify-content: center;
-//   flex-wrap: wrap;
+  display: flex;
 `;
 const EachGuest = styled.div`
-box-shadow: 5px 5px 5px gray;
-border-radius:5px;
-margin: 8px;
-padding:6px;
-background:#F7F4F2;
+  box-shadow: 5px 5px 5px gray;
+  border-radius: 5px;
+  margin: 8px;
+  padding: 6px;
+  background: #f7f4f2;
 `;
 const EachGuestInfo = styled.span`
-//   border: 1.5px solid black;
-padding:2px;
+  padding: 2px;
   display: flex;
   justify-content: center;
 `;
-export default function Table() {
+export default function AllGuest() {
   const { guests, setGuests } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
@@ -65,7 +62,6 @@ export default function Table() {
   return (
     <div>
       <TableWrapper>
-
         {guests.length > 0
           ? guests.map((guest, index) => (
               <EachGuest key={guest.id}>
@@ -74,14 +70,16 @@ export default function Table() {
                 <button onClick={() => edit(guest)}>edit</button>
                 <span>#{index}</span>
                 <EachGuestInfo>
-                 <h3> {guest.firstName} {guest.lastName}</h3>
+                  <h3>
+                    {" "}
+                    {guest.firstName} {guest.lastName}
+                  </h3>
                 </EachGuestInfo>
                 <EachGuestInfo>{guest.gender}</EachGuestInfo>
                 <EachGuestInfo>Age: {guest.age} </EachGuestInfo>
                 <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
                 <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
                 <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
-
               </EachGuest>
             ))
           : "no guest"}

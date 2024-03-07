@@ -1,8 +1,8 @@
 "use client"
 import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
-import { Guest, GuestsContext } from "../page";
 import React from "react";
+import { Guest, GuestsContext } from "../layout";
 const SidePanels = styled.span`
   z-index: 1;
   width: 30vw;
