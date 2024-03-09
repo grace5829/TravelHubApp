@@ -9,7 +9,13 @@ const IndividualLink = styled(Link)`
 font-weight: bold;
 font-size: 20px;
 
+&:hover {
+  background-color: #5fbbe3;
+}
+
 `;
+
+
 
 
 export default function NavBar() {
