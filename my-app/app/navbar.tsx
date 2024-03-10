@@ -8,6 +8,7 @@ const IndividualLink = styled(Link)`
   font-family: fantasy;
 font-weight: bold;
 font-size: 20px;
+padding-left:5px;
 
 &:hover {
   background-color: #5fbbe3;
@@ -23,6 +24,7 @@ export default function NavBar() {
     <span>
         <IndividualLink href="/">Home</IndividualLink>
         <IndividualLink href="/guest">Guest List</IndividualLink>
+        <IndividualLink href="/event">Event</IndividualLink>
     </span>
   );
 }
