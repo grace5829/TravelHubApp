@@ -170,3 +170,22 @@ if __name__=='__main__':
 
 
 
+class Event(db.Model):
+    __tablename__ = 'guests'
+    id=db.Column(db.Integer, primary_key=True)
+    notes=db.Column(db.String(100), nullable=False)
+    location=db.Column(db.String(30), nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False)
+    end_date = db.Column(db.DateTime, nullable=False)
+    name=db.Column(db.String(40), nullable=False)
+
+
+    def __repr__(self):
+        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.location}, start_date={self.start_date}, end_date={self.end_date},  name={self.name}   >"
+
+    def __init__(self, notes,location, start_date, end_date, name):
+        self.notes = notes
+        self.location = location
+        self.end_date=end_date
+        self.start_date=start_date
+        self.name=name
