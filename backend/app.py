@@ -189,3 +189,12 @@ class Event(db.Model):
         self.end_date=end_date
         self.start_date=start_date
         self.name=name
+
+def format_event(event):
+    return {
+        "notes":event.notes,
+        'id': event.id,
+        'start_date': event.start_date,
+        'end_date': event.end_date,
+        'name': event.name, 
+    }
