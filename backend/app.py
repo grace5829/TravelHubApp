@@ -73,10 +73,6 @@ def format_guest(guests):
     }
 
 
-@app.route('/')
-def home():
-    return 'hello world'
-
 
 # create a guest 
 @app.route('/guests', methods=['POST'])
