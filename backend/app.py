@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 import os
 from dotenv import load_dotenv
-
+from flask import jsonify
 load_dotenv()
 
 db_password = os.getenv("DATABASE_PASSWORD")
@@ -108,7 +108,6 @@ def create_guest():
         guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
-
 # get all guests, dont need 'GET'; set by default
 @app.route('/guests', methods=['GET'])
 def get_guests():
@@ -171,13 +170,13 @@ class Event(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     notes=db.Column(db.String(100), nullable=False)
     location=db.Column(db.String(30), nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     name=db.Column(db.String(40), nullable=False)
 
 
     def __repr__(self):
-        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.location}, start_date={self.start_date}, end_date={self.end_date},  name={self.name}   >"
+        return f"<Event(id={self.id}, notes={self.notes}, location={self.location}, start_date={self.start_date}, end_date={self.end_date},  name={self.name}   >"
 
     def __init__(self, notes,location, start_date, end_date, name):
         self.notes = notes
@@ -191,9 +190,18 @@ def format_event(event):
         "notes":event.notes,
         'id': event.id,
         'start_date': event.start_date,
+        'location':event.location,
         'end_date': event.end_date,
         'name': event.name, 
     }
+
+@app.route('/event', methods=['GET'])
+def get_event():
+    event=Event.query.order_by(Event.id.asc()).all()
+    event_list=[]
+    for event in event:
+        event_list.append(format_event(event))
+    return {'event':event_list}
 
 @app.route('/event', methods=['POST'])
 def create_event():
@@ -203,6 +211,7 @@ def create_event():
     # Extracting data from the request
     notes = data['notes']
     name = data['name']
+    location=data['location']
     start_date=data['start_date']
     end_date=data['end_date']
 
@@ -210,9 +219,15 @@ def create_event():
     new_event = Event(
         notes=notes,
         name=name,
+        location=location,
         start_date=start_date,
         end_date=end_date
     )
     db.session.add(new_event)
     db.session.commit()
-    return {'guests':new_event}
+    event=Event.query.order_by(Event.id.asc()).all()
+    event_list=[]
+    for event in event:
+        event_list.append(format_event(event))
+    return {'event':event_list}
+
