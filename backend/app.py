@@ -109,7 +109,7 @@ def create_guest():
     return {'guests':guest_list}
 
 
-# get all events, dont need 'GET'; set by default
+# get all guests, dont need 'GET'; set by default
 @app.route('/guests', methods=['GET'])
 def get_guests():
     guests=Guests.query.order_by(Guests.id.asc()).all()
@@ -125,7 +125,7 @@ def get_guest(id):
     formatted_guest=format_guest(guest)
     return {'guest':formatted_guest}
 
-# delete event 
+# delete guest 
 @app.route('/guest/<id>', methods=['DELETE'])
 def delete_guest(id):
     guest=Guests.query.filter_by(id=id).one()
@@ -137,7 +137,7 @@ def delete_guest(id):
         guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
-# update event 
+# update guest 
 @app.route('/guests/<id>', methods=['PUT'])
 def update_guest(id):
     data = request.json
@@ -167,7 +167,7 @@ if __name__=='__main__':
 
 
 class Event(db.Model):
-    __tablename__ = 'guests'
+    __tablename__ = 'event'
     id=db.Column(db.Integer, primary_key=True)
     notes=db.Column(db.String(100), nullable=False)
     location=db.Column(db.String(30), nullable=False)
@@ -213,11 +213,6 @@ def create_event():
         start_date=start_date,
         end_date=end_date
     )
-
     db.session.add(new_event)
     db.session.commit()
-    # event=Event.query.order_by(Event.id.asc()).all()
-    # guest_list=[]
-    # for guest in guests:
-    #     guest_list.append(format_guest(guest))
     return {'guests':new_event}
