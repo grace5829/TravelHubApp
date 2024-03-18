@@ -5,7 +5,6 @@ from datetime import datetime
 from enum import Enum
 import os
 from dotenv import load_dotenv
-from flask import jsonify
 load_dotenv()
 
 db_password = os.getenv("DATABASE_PASSWORD")
@@ -17,156 +16,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 CORS(app)
 
-
-
-
-
 # to load the db 
-# new terminal, cd to correct folder, type python and enter, run "from app import db,app" ,
-# app.app_context().push(), db.create_all()
-
-class RSVPEnum(Enum):
-    YES = 'yes'
-    NO = 'no'
-    MAYBE = 'maybe'
-    PENDING = 'pending'
-class GenderEnum(Enum):
-    MALE = 'male'
-    FEMALE = "female"
-
-
-class Guests(db.Model):
-    __tablename__ = 'guests'
-    id=db.Column(db.Integer, primary_key=True)
-    notes=db.Column(db.String(100), nullable=False)
-    firstName=db.Column(db.String(20), nullable=False)
-    gender=db.Column(db.Enum(GenderEnum), nullable=False)
-    lastName=db.Column(db.String(20), nullable=False)
-    age=db.Column(db.Integer, nullable=False)
-    amountPaid=db.Column(db.Integer, nullable=False)
-    RSVP = db.Column(db.Enum(RSVPEnum), nullable=False)
-    created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at})>"
-
-    def __init__(self, notes, firstName, lastName, age, amountPaid, RSVP, gender):
-        self.notes = notes
-        self.firstName = firstName
-        self.lastName = lastName
-        self.age = age
-        self.amountPaid = amountPaid
-        self.gender = gender
-        self.RSVP = RSVP
-
-def format_guest(guests):
-    return {
-        "notes":guests.notes,
-        'id': guests.id,
-        'created_at': guests.created_at,
-        'firstName': guests.firstName,
-        'lastName': guests.lastName, 
-        'age': guests.age,
-        'amountPaid': guests.amountPaid,
-        'gender': guests.gender.value.upper(),
-        'RSVP': guests.RSVP.value.upper()
-    }
+# new terminal, cd to correct folder, type python and enter, run "
+# from app import db,app
+# app.app_context().push()
+#  db.create_all()
 
 
 
-# create a guest 
-@app.route('/guests', methods=['POST'])
-def create_guest():
-    data = request.json
-    app.logger.info(f"Received payload: {data}")
-
-    # Extracting data from the request
-    notes = data['notes']
-    firstName = data['firstName']
-    lastName = data['lastName']
-    age = data['age']
-    amountPaid = data['amountPaid']
-    RSVP = data['RSVP']
-    gender = data['gender']
-
-    # Creating a new guest instance
-    new_guest = Guests(
-        notes=notes,
-        firstName=firstName,
-        lastName=lastName,
-        gender=gender,
-        age=age,
-        amountPaid=amountPaid,
-        RSVP=RSVP
-    )
-
-    db.session.add(new_guest)
-    db.session.commit()
-    guests=Guests.query.order_by(Guests.id.asc()).all()
-    guest_list=[]
-    for guest in guests:
-        guest_list.append(format_guest(guest))
-    return {'guests':guest_list}
-
-# get all guests, dont need 'GET'; set by default
-@app.route('/guests', methods=['GET'])
-def get_guests():
-    guests=Guests.query.order_by(Guests.id.asc()).all()
-    guest_list=[]
-    for guest in guests:
-        guest_list.append(format_guest(guest))
-    return {'guests':guest_list}
-
-# get single event
-@app.route('/guest/<id>', methods=['GET'])
-def get_guest(id):
-    guest=Guests.query.filter_by(id=id).one()
-    formatted_guest=format_guest(guest)
-    return {'guest':formatted_guest}
-
-# delete guest 
-@app.route('/guest/<id>', methods=['DELETE'])
-def delete_guest(id):
-    guest=Guests.query.filter_by(id=id).one()
-    db.session.delete(guest)
-    db.session.commit()
-    guests=Guests.query.order_by(Guests.id.asc()).all()
-    guest_list=[]
-    for guest in guests:
-        guest_list.append(format_guest(guest))
-    return {'guests':guest_list}
-
-# update guest 
-@app.route('/guests/<id>', methods=['PUT'])
-def update_guest(id):
-    data = request.json
-    guest_to_update = Guests.query.get(id)
-
-    if guest_to_update:
-        guest_to_update.notes = data.get('notes', guest_to_update.notes)
-        guest_to_update.firstName = data.get('firstName', guest_to_update.firstName)
-        guest_to_update.lastName = data.get('lastName', guest_to_update.lastName)
-        guest_to_update.age = data.get('age', guest_to_update.age)
-        guest_to_update.amountPaid = data.get('amountPaid', guest_to_update.amountPaid)
-        guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
-        guest_to_update.gender = data.get('gender', guest_to_update.gender)
-        db.session.commit()
-        guests=Guests.query.order_by(Guests.id.asc()).all()
-        guest_list=[]
-        for guest in guests:
-            guest_list.append(format_guest(guest))
-        return {'guests':guest_list}
-
-    return {"error": "Guest not found"}, 404
-
-
-if __name__=='__main__':
-    app.run(debug=True)
-
-
-
-class Event(db.Model):
-    __tablename__ = 'event'
+class Events(db.Model):
+    __tablename__ = 'events'
     id=db.Column(db.Integer, primary_key=True)
     notes=db.Column(db.String(100), nullable=False)
     location=db.Column(db.String(30), nullable=False)
@@ -195,15 +54,15 @@ def format_event(event):
         'name': event.name, 
     }
 
-@app.route('/event', methods=['GET'])
-def get_event():
-    event=Event.query.order_by(Event.id.asc()).all()
-    event_list=[]
-    for event in event:
-        event_list.append(format_event(event))
-    return {'event':event_list}
+@app.route('/events', methods=['GET'])
+def get_events():
+    events=Events.query.order_by(Events.id.asc()).all()
+    events_list=[]
+    for event in events:
+        events_list.append(format_event(event))
+    return {'event':events_list}
 
-@app.route('/event', methods=['POST'])
+@app.route('/events', methods=['POST'])
 def create_event():
     data = request.json
     app.logger.info(f"Received payload: {data}")
@@ -215,8 +74,8 @@ def create_event():
     start_date=data['start_date']
     end_date=data['end_date']
 
-    # Creating a new guest instance
-    new_event = Event(
+    # Creating a new event 
+    new_event = Events(
         notes=notes,
         name=name,
         location=location,
@@ -225,9 +84,141 @@ def create_event():
     )
     db.session.add(new_event)
     db.session.commit()
-    event=Event.query.order_by(Event.id.asc()).all()
-    event_list=[]
-    for event in event:
-        event_list.append(format_event(event))
-    return {'event':event_list}
 
+    return format_event(new_event)
+
+class RSVPEnum(Enum):
+    YES = 'yes'
+    NO = 'no'
+    MAYBE = 'maybe'
+    PENDING = 'pending'
+class GenderEnum(Enum):
+    MALE = 'male'
+    FEMALE = "female"
+
+
+class Guests(db.Model):
+    __tablename__ = 'guests'
+    id=db.Column(db.Integer, primary_key=True)
+    notes=db.Column(db.String(100), nullable=False)
+    firstName=db.Column(db.String(20), nullable=False)
+    gender=db.Column(db.Enum(GenderEnum), nullable=False)
+    lastName=db.Column(db.String(20), nullable=False)
+    age=db.Column(db.Integer, nullable=False)
+    amountPaid=db.Column(db.Integer, nullable=False)
+    RSVP = db.Column(db.Enum(RSVPEnum), nullable=False)
+    created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event = db.relationship('Events', backref='guests')
+
+    def __repr__(self):
+        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at}, event_id={self.event_id}, event={self.event})>"
+
+    def __init__(self, notes, firstName, lastName, age, amountPaid, RSVP, gender, event_id):
+        self.notes = notes
+        self.firstName = firstName
+        self.lastName = lastName
+        self.age = age
+        self.amountPaid = amountPaid
+        self.gender = gender
+        self.RSVP = RSVP
+        self.event_id=event_id
+
+def format_guest(guests):
+    return {
+        "notes":guests.notes,
+        'id': guests.id,
+        'created_at': guests.created_at,
+        'firstName': guests.firstName,
+        'lastName': guests.lastName, 
+        'age': guests.age,
+        'amountPaid': guests.amountPaid,
+        'gender': guests.gender.value.upper(),
+        'RSVP': guests.RSVP.value.upper(),
+        'event_id':guests.event_id
+    }
+
+
+
+# create a guest 
+@app.route('/guests', methods=['POST'])
+def create_guest():
+    data = request.json
+    app.logger.info(f"Received payload: {data}")
+    # Extracting data from the request
+    notes = data['notes']
+    firstName = data['firstName']
+    lastName = data['lastName']
+    age = data['age']
+    amountPaid = data['amountPaid']
+    RSVP = data['RSVP']
+    gender = data['gender']
+    event_id=data['event_id']
+    # Creating a new guest instance
+    new_guest = Guests(
+        notes=notes,
+        firstName=firstName,
+        lastName=lastName,
+        gender=gender,
+        age=age,
+        amountPaid=amountPaid,
+        RSVP=RSVP,
+        event_id=event_id
+    )
+
+    db.session.add(new_guest)
+    db.session.commit()
+    return format_guest(new_guest)
+
+# get all guests, dont need 'GET'; set by default
+@app.route('/guests', methods=['GET'])
+def get_guests():
+    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guest_list=[]
+    for guest in guests:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
+
+# get single event
+@app.route('/guest/<id>', methods=['GET'])
+def get_guest(id):
+    guest=Guests.query.filter_by(id=id).one()
+    # formatted_guest=format_guest(guest)
+    return format_guest(guest)
+
+# delete guest 
+@app.route('/guest/<id>', methods=['DELETE'])
+def delete_guest(id):
+    guest=Guests.query.filter_by(id=id).one()
+    db.session.delete(guest)
+    db.session.commit()
+    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guest_list=[]
+    for guest in guests:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
+
+# update guest 
+@app.route('/guests/<id>', methods=['PUT'])
+def update_guest(id):
+    data = request.json
+    guest_to_update = Guests.query.get(id)
+
+    if guest_to_update:
+        guest_to_update.notes = data.get('notes', guest_to_update.notes)
+        guest_to_update.firstName = data.get('firstName', guest_to_update.firstName)
+        guest_to_update.lastName = data.get('lastName', guest_to_update.lastName)
+        guest_to_update.age = data.get('age', guest_to_update.age)
+        guest_to_update.amountPaid = data.get('amountPaid', guest_to_update.amountPaid)
+        guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
+        guest_to_update.gender = data.get('gender', guest_to_update.gender)
+        guest_to_update.event_id = data.get('event', guest_to_update.event_id)
+        db.session.commit()
+
+        return format_guest(guest_to_update)
+
+    return {"error": "Guest not found"}, 404
+
+
+if __name__=='__main__':
+    app.run(debug=True)
