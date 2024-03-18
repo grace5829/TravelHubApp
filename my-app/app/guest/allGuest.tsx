@@ -31,6 +31,7 @@ export default function AllGuest() {
     amountDue: 0,
     RSVP: "PENDING",
     notes: "",
+    event_id:0
   });
 
   const removeGuest = async (id: number | undefined) => {
@@ -80,6 +81,7 @@ export default function AllGuest() {
                 <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
                 <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
                 <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
+                <EachGuestInfo>Event ID: {guest.event_id}</EachGuestInfo>
               </EachGuest>
             ))
           : "no guest"}

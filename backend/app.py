@@ -60,7 +60,7 @@ def get_events():
     events_list=[]
     for event in events:
         events_list.append(format_event(event))
-    return {'event':events_list}
+    return {'events':events_list}
 
 @app.route('/events', methods=['POST'])
 def create_event():

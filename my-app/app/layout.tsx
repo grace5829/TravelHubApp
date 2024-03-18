@@ -18,15 +18,27 @@ export type Guest = {
   RSVP: "YES" | "NO" | "MAYBE" | "PENDING";
   id?: number;
   notes: string;
+  event_id:number
+};
+export type Event = {
+name:string;
+location:string;
+start_date:Date;
+end_date:Date;
+notes:string
 };
 export type GlobalContent = {
   guests: Array<Guest>;
   setGuests: React.Dispatch<React.SetStateAction<Guest[]>>;
+  events: Array<Event>;
+  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
 };
 
 export const GuestsContext = createContext<GlobalContent>({
   guests: [],
   setGuests: () => {},
+  events: [],
+  setEvents: () => {},
 });
 export default function RootLayout({
   children,
@@ -34,31 +46,53 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [guests, setGuests] = useState<Array<Guest>>([]);
+  const [events, setEvents] = useState<Array<Event>>([]);
 
   const contextValue: GlobalContent = {
     guests,
     setGuests,
+    events,
+    setEvents
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/guests", {
-          method: "GET",
-        });
+  const fetchGuestData = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/guests", {
+        method: "GET",
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const result = await response.json();
-        setGuests(result.guests);
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    };
-    fetchData();
+
+      const result = await response.json();
+      setGuests(result.guests);
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+  const fetchEventData = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/events", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const result = await response.json();
+
+      setEvents(result.events);
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+  useEffect(() => {
+    fetchGuestData();
+    fetchEventData()
   }, []);
+
   return (
     <html lang="en">
       <body className={inter.className}>
