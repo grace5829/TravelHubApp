@@ -63,7 +63,7 @@ export default function AllGuest() {
   return (
     <div>
       <TableWrapper>
-        {guests.length > 0
+        {guests
           ? guests.map((guest, index) => (
               <EachGuest key={guest.id}>
                 <button>+</button>

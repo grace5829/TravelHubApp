@@ -1,9 +1,10 @@
+import AllEvents from "./allEvents";
 
 
 export default function Event() {
   return (
 <div>
-Event info
+<AllEvents/>
 </div>
   );
 }
