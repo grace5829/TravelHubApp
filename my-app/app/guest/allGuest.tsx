@@ -1,6 +1,6 @@
 "use client";
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Guest, GuestsContext } from "../layout";
 import SidePanel from "./sidePanel";
 
@@ -60,6 +60,37 @@ export default function AllGuest() {
     setCurrentGuest(guest);
   };
 
+const findEventName= async (eventId:number) =>{
+  try {
+    const response = await fetch(`http://127.0.0.1:5000/event/${eventId}`, {
+      method: "GET", // Use the appropriate HTTP method
+      headers: {
+        "Content-Type": "application/json",
+        // Add any additional headers if required
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const result = await response.json();
+// console.log(result)
+return result
+  } catch (error: any) {
+    console.error("Error fetching data:", error.message);
+  }
+
+}
+
+useEffect(() => {
+guests.forEach((guest,idx)=> {
+  let currEvent=findEventName(guest.id)
+  // guests[idx].eventName=currEvent?.name
+  console.log(currEvent)
+})
+}, [guests]);
+findEventName(1)
   return (
     <div>
       <TableWrapper>
@@ -81,6 +112,7 @@ export default function AllGuest() {
                 <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
                 <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
                 <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
+                <EachGuestInfo>Event ID: {guest.event_id}</EachGuestInfo>
                 <EachGuestInfo>Event ID: {guest.event_id}</EachGuestInfo>
               </EachGuest>
             ))

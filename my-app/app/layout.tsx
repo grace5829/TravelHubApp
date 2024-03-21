@@ -16,9 +16,10 @@ export type Guest = {
   age: number;
   amountDue: number;
   RSVP: "YES" | "NO" | "MAYBE" | "PENDING";
-  id?: number;
+  id: number;
   notes: string;
   event_id:number
+  eventName?:string
 };
 export type Event = {
 name:string;

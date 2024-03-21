@@ -53,7 +53,7 @@ def format_event(event):
         'end_date': event.end_date,
         'name': event.name, 
     }
-
+# get all events
 @app.route('/events', methods=['GET'])
 def get_events():
     events=Events.query.order_by(Events.id.asc()).all()
@@ -61,7 +61,8 @@ def get_events():
     for event in events:
         events_list.append(format_event(event))
     return {'events':events_list}
-
+    
+    # Creating a new event 
 @app.route('/events', methods=['POST'])
 def create_event():
     data = request.json
@@ -74,7 +75,6 @@ def create_event():
     start_date=data['start_date']
     end_date=data['end_date']
 
-    # Creating a new event 
     new_event = Events(
         notes=notes,
         name=name,
@@ -86,6 +86,44 @@ def create_event():
     db.session.commit()
 
     return format_event(new_event)
+
+# get single event
+@app.route('/event/<id>', methods=['GET'])
+def get_event(id):
+    event=Events.query.filter_by(id=id).one()
+    return format_event(event)
+
+# delete event 
+@app.route('/event/<id>', methods=['DELETE'])
+def delete_event(id):
+    event=Events.query.filter_by(id=id).one()
+    db.session.delete(event)
+    db.session.commit()
+    events=Events.query.order_by(Events.id.asc()).all()
+    event_list=[]
+    for event in events:
+        event_list.append(format_guest(gueeventst))
+    return {'events':event_list}
+
+# update event 
+@app.route('/events/<id>', methods=['PUT'])
+def update_event(id):
+    data = request.json
+    event_to_update = Events.query.get(id)
+
+    if event_to_update:
+        event_to_update.notes = data.get('notes', event_to_update.notes)
+        event_to_update.name = data.get('name', event_to_update.name)
+        event_to_update.location = data.get('location', event_to_update.location)
+        event_to_update.start_date = data.get('start_date', event_to_update.start_date)
+        event_to_update.end_date = data.get('end_date', event_to_update.end_date)
+
+        db.session.commit()
+
+        return format_event(event_to_update)
+
+    return {"error": "Event not found"}, 404
+
 
 class RSVPEnum(Enum):
     YES = 'yes'
@@ -179,11 +217,10 @@ def get_guests():
         guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
-# get single event
+# get single guest
 @app.route('/guest/<id>', methods=['GET'])
 def get_guest(id):
     guest=Guests.query.filter_by(id=id).one()
-    # formatted_guest=format_guest(guest)
     return format_guest(guest)
 
 # delete guest 
