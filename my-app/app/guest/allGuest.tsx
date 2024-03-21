@@ -23,6 +23,7 @@ const EachGuestInfo = styled.span`
 export default function AllGuest() {
   const { guests, setGuests } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
+  const [eventNames, setEventNames] = useState<String[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
     lastName: "",
@@ -31,7 +32,8 @@ export default function AllGuest() {
     amountDue: 0,
     RSVP: "PENDING",
     notes: "",
-    event_id:0
+    event_id:0,
+    event_name:null
   });
 
   const removeGuest = async (id: number | undefined) => {
@@ -60,9 +62,9 @@ export default function AllGuest() {
     setCurrentGuest(guest);
   };
 
-const findEventName= async (eventId:number) =>{
+const findEventName= async (eventId:number|undefined) =>{
   try {
-    const response = await fetch(`http://127.0.0.1:5000/event/${eventId}`, {
+    const response = await fetch(`http://127.0.0.1:5000/guestName/${eventId}`, {
       method: "GET", // Use the appropriate HTTP method
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +77,6 @@ const findEventName= async (eventId:number) =>{
     }
 
     const result = await response.json();
-// console.log(result)
 return result
   } catch (error: any) {
     console.error("Error fetching data:", error.message);
@@ -84,13 +85,12 @@ return result
 }
 
 useEffect(() => {
-guests.forEach((guest,idx)=> {
-  let currEvent=findEventName(guest.id)
-  // guests[idx].eventName=currEvent?.name
-  console.log(currEvent)
-})
+console.log('running')
 }, [guests]);
-findEventName(1)
+
+
+console.log(guests)
+
   return (
     <div>
       <TableWrapper>
@@ -112,8 +112,7 @@ findEventName(1)
                 <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
                 <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
                 <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
-                <EachGuestInfo>Event ID: {guest.event_id}</EachGuestInfo>
-                <EachGuestInfo>Event ID: {guest.event_id}</EachGuestInfo>
+                <EachGuestInfo>Event Name: {guest.event_name}</EachGuestInfo>
               </EachGuest>
             ))
           : "no guest"}

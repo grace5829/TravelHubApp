@@ -162,9 +162,9 @@ class Guests(db.Model):
         self.RSVP = RSVP
         self.event_id=event_id
 
-def format_guest(guests):
-    return {
-        "notes":guests.notes,
+def format_guest(guests,event_name, include_event_name=False):
+    formatted_guest = {
+        "notes": guests.notes,
         'id': guests.id,
         'created_at': guests.created_at,
         'firstName': guests.firstName,
@@ -173,8 +173,12 @@ def format_guest(guests):
         'amountPaid': guests.amountPaid,
         'gender': guests.gender.value.upper(),
         'RSVP': guests.RSVP.value.upper(),
-        'event_id':guests.event_id
+        'event_id': guests.event_id
     }
+    if include_event_name:
+        formatted_guest['event_name'] = event_name
+    
+    return formatted_guest
 
 
 
@@ -206,22 +210,26 @@ def create_guest():
 
     db.session.add(new_guest)
     db.session.commit()
-    return format_guest(new_guest)
+    return format_guest(new_guest, event_name="false" ,include_event_name=False)
 
 # get all guests, dont need 'GET'; set by default
 @app.route('/guests', methods=['GET'])
 def get_guests():
-    guests=Guests.query.order_by(Guests.id.asc()).all()
+    guests_with_events = db.session.query(Guests, Events.name)\
+        .join(Events, Guests.event_id == Events.id)\
+        .all()    
+    # guests=Guests.query.order_by(Guests.id.asc()).all()
     guest_list=[]
-    for guest in guests:
-        guest_list.append(format_guest(guest))
+    for guest, event_name in guests_with_events:
+        guest_list.append(format_guest(guest, event_name=event_name, include_event_name=True))
     return {'guests':guest_list}
 
 # get single guest
 @app.route('/guest/<id>', methods=['GET'])
 def get_guest(id):
     guest=Guests.query.filter_by(id=id).one()
-    return format_guest(guest)
+    return format_guest(guest, event_name="false", include_event_name=False)
+
 
 # delete guest 
 @app.route('/guest/<id>', methods=['DELETE'])
@@ -232,7 +240,7 @@ def delete_guest(id):
     guests=Guests.query.order_by(Guests.id.asc()).all()
     guest_list=[]
     for guest in guests:
-        guest_list.append(format_guest(guest))
+        guest_list.append(format_guest(guest, event_name="false", include_event_name=False))
     return {'guests':guest_list}
 
 # update guest 
@@ -252,7 +260,7 @@ def update_guest(id):
         guest_to_update.event_id = data.get('event', guest_to_update.event_id)
         db.session.commit()
 
-        return format_guest(guest_to_update)
+        return format_guest(guest_to_update, event_name="false", include_event_name=False)
 
     return {"error": "Guest not found"}, 404
 
