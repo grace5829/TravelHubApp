@@ -7,6 +7,9 @@ import SidePanel from "./sidePanel";
 const TableWrapper = styled.span`
   margin: 10px;
   display: flex;
+  flex-wrap:wrap;
+  justify-content: center;
+
 `;
 const EachGuest = styled.div`
   box-shadow: 5px 5px 5px gray;
@@ -14,28 +17,28 @@ const EachGuest = styled.div`
   margin: 8px;
   padding: 6px;
   background: #f7f4f2;
+  width: 23VW
 `;
 const EachGuestInfo = styled.span`
   padding: 2px;
   display: flex;
+  flex-wrap:wrap;
   justify-content: center;
 `;
 export default function AllGuest() {
-  const { guests, setGuests } = useContext(GuestsContext);
+  const { guests, setGuests, events } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
   const [eventNames, setEventNames] = useState<String[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
     lastName: "",
-    gender: "FEMALE",
+    gender: "MALE",
     age: 0,
     amountDue: 0,
     RSVP: "PENDING",
     notes: "",
-    event_id:0,
-    event_name:null
+    event_id:1,
   });
-
   const removeGuest = async (id: number | undefined) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/guest/${id}`, {
@@ -62,34 +65,7 @@ export default function AllGuest() {
     setCurrentGuest(guest);
   };
 
-const findEventName= async (eventId:number|undefined) =>{
-  try {
-    const response = await fetch(`http://127.0.0.1:5000/guestName/${eventId}`, {
-      method: "GET", // Use the appropriate HTTP method
-      headers: {
-        "Content-Type": "application/json",
-        // Add any additional headers if required
-      },
-    });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const result = await response.json();
-return result
-  } catch (error: any) {
-    console.error("Error fetching data:", error.message);
-  }
-
-}
-
-useEffect(() => {
-console.log('running')
-}, [guests]);
-
-
-console.log(guests)
 
   return (
     <div>

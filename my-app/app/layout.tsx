@@ -19,9 +19,10 @@ export type Guest = {
   id?: number;
   notes: string;
   event_id:number;
-  event_name:string|null
+  event_name?:string|null
 };
 export type Event = {
+  id:number;
 name:string;
 location:string;
 start_date:string;
@@ -92,7 +93,7 @@ export default function RootLayout({
   useEffect(() => {
     fetchGuestData();
     fetchEventData()
-  }, []);
+  }, [guests]);
 
   return (
     <html lang="en">

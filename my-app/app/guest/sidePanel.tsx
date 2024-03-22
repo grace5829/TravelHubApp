@@ -31,14 +31,23 @@ export default function SidePanel({
     setCurrentGuest:React.Dispatch<React.SetStateAction<Guest>>;
     method:string
 }) {
-  const { guests, setGuests } = useContext(GuestsContext);
+  const { guests, setGuests, events } = useContext(GuestsContext);
   
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
+    console.log(event)
     const name = event.target.name;
     const value = event.target.value;
-    setCurrentGuest((values) => ({ ...values, [name]: value }));
+
+      if (name==='event_id'){
+
+        setCurrentGuest((values) => ({ ...values, [name]: Number(value)}));
+      } else {
+        setCurrentGuest((values) => ({ ...values, [name]: value}));
+
+      }
+
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -81,7 +90,7 @@ export default function SidePanel({
     }
     setHidden(!hidden);
   };
-
+console.log(currentGuest)
   return (
     <SidePanels>
         <button onClick={()=>setHidden(!hidden)}>X</button>
@@ -145,6 +154,17 @@ export default function SidePanel({
             <option value="YES">Yes</option>
             <option value="NO">No</option>
             <option value="MAYBE">Maybe</option>
+          </select>
+        </label>
+        <label htmlFor="event_id">
+          EVENT_ID: 
+          <select name="event_id" onChange={handleChange} defaultValue={currentGuest.event_name?currentGuest.event_name:undefined}>
+          <option value={undefined} >Pick one</option>
+
+            {events.map((event)=>(
+            <option value={event.id} key={event.id}>{event.name}</option>
+            ))}
+
           </select>
         </label>
 

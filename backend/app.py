@@ -143,7 +143,7 @@ class Guests(db.Model):
     gender=db.Column(db.Enum(GenderEnum), nullable=False)
     lastName=db.Column(db.String(20), nullable=False)
     age=db.Column(db.Integer, nullable=False)
-    amountPaid=db.Column(db.Integer, nullable=False)
+    amountDue=db.Column(db.Integer, nullable=False)
     RSVP = db.Column(db.Enum(RSVPEnum), nullable=False)
     created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
@@ -152,12 +152,12 @@ class Guests(db.Model):
     def __repr__(self):
         return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at}, event_id={self.event_id}, event={self.event})>"
 
-    def __init__(self, notes, firstName, lastName, age, amountPaid, RSVP, gender, event_id):
+    def __init__(self, notes, firstName, lastName, age, amountDue, RSVP, gender, event_id):
         self.notes = notes
         self.firstName = firstName
         self.lastName = lastName
         self.age = age
-        self.amountPaid = amountPaid
+        self.amountDue = amountDue
         self.gender = gender
         self.RSVP = RSVP
         self.event_id=event_id
@@ -170,7 +170,7 @@ def format_guest(guests,event_name, include_event_name=False):
         'firstName': guests.firstName,
         'lastName': guests.lastName, 
         'age': guests.age,
-        'amountPaid': guests.amountPaid,
+        'amountDue': guests.amountDue,
         'gender': guests.gender.value.upper(),
         'RSVP': guests.RSVP.value.upper(),
         'event_id': guests.event_id
@@ -192,7 +192,7 @@ def create_guest():
     firstName = data['firstName']
     lastName = data['lastName']
     age = data['age']
-    amountPaid = data['amountPaid']
+    amountDue = data['amountDue']
     RSVP = data['RSVP']
     gender = data['gender']
     event_id=data['event_id']
@@ -203,7 +203,7 @@ def create_guest():
         lastName=lastName,
         gender=gender,
         age=age,
-        amountPaid=amountPaid,
+        amountDue=amountDue,
         RSVP=RSVP,
         event_id=event_id
     )
@@ -254,7 +254,7 @@ def update_guest(id):
         guest_to_update.firstName = data.get('firstName', guest_to_update.firstName)
         guest_to_update.lastName = data.get('lastName', guest_to_update.lastName)
         guest_to_update.age = data.get('age', guest_to_update.age)
-        guest_to_update.amountPaid = data.get('amountPaid', guest_to_update.amountPaid)
+        guest_to_update.amountDue = data.get('amountDue', guest_to_update.amountDue)
         guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
         guest_to_update.gender = data.get('gender', guest_to_update.gender)
         guest_to_update.event_id = data.get('event', guest_to_update.event_id)
