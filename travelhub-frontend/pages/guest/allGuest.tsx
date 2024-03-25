@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import SidePanel from "./sidePanel";
 import { GuestsContext,Guest } from "../_app";
 
-const TableWrapper = styled.span`
+const TableWrapper = styled.div`
   margin: 10px;
   display: flex;
   flex-wrap:wrap;
@@ -24,6 +24,7 @@ const EachGuestInfo = styled.span`
   display: flex;
   flex-wrap:wrap;
   justify-content: center;
+  color:red
 `;
 export default function AllGuest() {
   const { guests, setGuests, events } = useContext(GuestsContext);

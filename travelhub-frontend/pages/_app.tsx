@@ -1,9 +1,19 @@
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import Guest from "./guest";
 import Header from "./header";
+import { ThemeProvider, createGlobalStyle, styled } from "styled-components";
+import Event from "./event";
+import Guest from "./guest";
 
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    }
+`;
 export type Guest = {
   firstName: string;
   lastName: string;
@@ -81,17 +91,38 @@ export default function App({ Component, pageProps }: AppProps) {
       console.error("Error fetching data:", error.message);
     }
   };
+
   useEffect(() => {
     fetchGuestData();
     fetchEventData();
   }, [guests]);
 
+  const theme = {
+    colors: {
+      primary: "#007bff",
+      secondary: "#6c757d",
+      background: "#f8f9fa",
+      text: "#343a40",
+    },
+    typography: {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "16px",
+    },
+    spacing: {
+      small: "8px",
+      medium: "16px",
+      large: "24px",
+    },
+  };
   return (
     <div>
-      <GuestsContext.Provider value={contextValue}>
-        <Header />
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <GuestsContext.Provider value={contextValue}>
+          <Header/>
         <Component {...pageProps} />
-      </GuestsContext.Provider>
+        </GuestsContext.Provider>
+      </ThemeProvider>
     </div>
   );
 }
