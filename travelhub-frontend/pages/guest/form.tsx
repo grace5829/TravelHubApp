@@ -1,9 +1,7 @@
-"use client";
 import { useState } from "react";
-
-import { Guest } from "../layout";
 import SidePanel from "./sidePanel";
 import React from "react";
+import { Guest } from "../_app";
 
 export default function Form() {
   const [addGuest, setAddGuest] = useState<boolean>(false);

@@ -12,6 +12,7 @@ const HeaderWrapper = styled.span`
   border-bottom: 1px solid black;
   margin-bottom: 5px;
 `;
+
 const Logo = styled.span`
   font-family: fantasy;
   font-weight: bold;

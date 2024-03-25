@@ -1,12 +1,13 @@
-"use client";
 import styled from "styled-components";
-import { useContext, useState } from "react";
-import { Guest, GuestsContext } from "../layout";
-import SidePanel from "../guest/sidePanel";
+import { useContext } from "react";
+import Link from "next/link";
+import { GuestsContext } from "../_app";
 
-const TableWrapper = styled.span`
+const TableWrapper = styled(Link)`
   margin: 10px;
   display: flex;
+  text-decoration: none;
+  color:black;
 `;
 const EachEvent = styled.div`
   box-shadow: 5px 5px 5px gray;
@@ -23,15 +24,11 @@ const EachEventInfo = styled.span`
 
 export default function AllEvents() {
   const { events, setEvents } = useContext(GuestsContext);
-  // let currDate
-  // events? currDate=events[0].start_date :null
-  // console.log(typeof currDate)
-  console.log(events[0]?.start_date.slice(0, 16));
 
   return (
     <div>
       {events ? (
-        <TableWrapper>
+        <TableWrapper href="/event/guestPerEvent">
           {events.map((event) => (
             <EachEvent key={event.location + event.name}>
               <EachEventInfo><h3>{event.name} </h3></EachEventInfo>

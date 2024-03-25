@@ -1,8 +1,9 @@
-"use client"
 import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import React from "react";
-import { Guest, GuestsContext } from "../layout";
+import { Guest, GuestsContext } from "../_app";
+
+
 const SidePanels = styled.span`
   z-index: 1;
   width: 30vw;
@@ -23,40 +24,37 @@ export default function SidePanel({
   hidden,
   currentGuest,
   setCurrentGuest,
-  method
+  method,
 }: {
-    setHidden: React.Dispatch<React.SetStateAction<boolean>>;
-    hidden: boolean;
-    currentGuest:Guest;
-    setCurrentGuest:React.Dispatch<React.SetStateAction<Guest>>;
-    method:string
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  hidden: boolean;
+  currentGuest: Guest;
+  setCurrentGuest: React.Dispatch<React.SetStateAction<Guest>>;
+  method: string;
 }) {
   const { guests, setGuests, events } = useContext(GuestsContext);
-  
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
-    console.log(event)
+    console.log(event);
     const name = event.target.name;
     const value = event.target.value;
 
-      if (name==='event_id'){
-
-        setCurrentGuest((values) => ({ ...values, [name]: Number(value)}));
-      } else {
-        setCurrentGuest((values) => ({ ...values, [name]: value}));
-
-      }
-
+    if (name === "event_id") {
+      setCurrentGuest((values) => ({ ...values, [name]: Number(value) }));
+    } else {
+      setCurrentGuest((values) => ({ ...values, [name]: value }));
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let API
-    if(method==='POST'){
-       API=`http://127.0.0.1:5000/guests`
+    let API;
+    if (method === "POST") {
+      API = `http://127.0.0.1:5000/guests`;
     } else {
-         API=`http://127.0.0.1:5000/guests/${currentGuest.id}`
+      API = `http://127.0.0.1:5000/guests/${currentGuest.id}`;
     }
     try {
       const response = await fetch(API, {
@@ -77,23 +75,23 @@ export default function SidePanel({
       console.error("Error fetching data:", error);
     }
 
-    if (method==='POST'){
-        setCurrentGuest({
-            firstName: "",
-            lastName: "",
-            gender: "FEMALE",
-            age: 0,
-            amountDue: 0,
-            RSVP: "PENDING",
-            notes: "",
-          })
+    if (method === "POST") {
+      setCurrentGuest({
+        firstName: "",
+        lastName: "",
+        gender: "FEMALE",
+        age: 0,
+        amountDue: 0,
+        RSVP: "PENDING",
+        notes: "",
+      });
     }
     setHidden(!hidden);
   };
-console.log(currentGuest)
+  console.log(currentGuest);
   return (
     <SidePanels>
-        <button onClick={()=>setHidden(!hidden)}>X</button>
+      <button onClick={() => setHidden(!hidden)}>X</button>
       <FormWrapper onSubmit={handleSubmit}>
         <label htmlFor="firstName">
           First Name:
@@ -142,14 +140,22 @@ console.log(currentGuest)
         </label>
         <label htmlFor="gender">
           Gender:
-          <select name="gender" onChange={handleChange} defaultValue={currentGuest.gender.toUpperCase()}>
+          <select
+            name="gender"
+            onChange={handleChange}
+            defaultValue={currentGuest.gender.toUpperCase()}
+          >
             <option value="FEMALE">Female</option>
             <option value="MALE">Male</option>
           </select>
         </label>
         <label htmlFor="RSVP">
-          RSVP: 
-          <select name="RSVP" onChange={handleChange} defaultValue={currentGuest.RSVP.toUpperCase()}>
+          RSVP:
+          <select
+            name="RSVP"
+            onChange={handleChange}
+            defaultValue={currentGuest.RSVP.toUpperCase()}
+          >
             <option value="PENDING">Pending</option>
             <option value="YES">Yes</option>
             <option value="NO">No</option>
@@ -157,14 +163,21 @@ console.log(currentGuest)
           </select>
         </label>
         <label htmlFor="event_id">
-          EVENT_ID: 
-          <select name="event_id" onChange={handleChange} defaultValue={currentGuest.event_name?currentGuest.event_name:undefined}>
-          <option value={undefined} >Pick one</option>
+          EVENT_ID:
+          <select
+            name="event_id"
+            onChange={handleChange}
+            defaultValue={
+              currentGuest.event_name ? currentGuest.event_name : undefined
+            }
+          >
+            <option value={undefined}>Pick one</option>
 
-            {events.map((event)=>(
-            <option value={event.id} key={event.id}>{event.name}</option>
+            {events.map((event) => (
+              <option value={event.id} key={event.id}>
+                {event.name}
+              </option>
             ))}
-
           </select>
         </label>
 

@@ -1,4 +1,4 @@
-import AllEvents from "./allEvents";
+import AllEvents from "./event/allEvents";
 
 
 export default function Event() {

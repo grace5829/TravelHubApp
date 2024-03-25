@@ -1,5 +1,5 @@
-import Form from "./form";
-import AllGuest from "./allGuest";
+import Form from "./guest/form";
+import AllGuest from "./guest/allGuest";
 
 export default function Guest() {
   return (

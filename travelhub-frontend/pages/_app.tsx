@@ -1,13 +1,8 @@
-"use client"
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import Guest from "./guest/page";
+import Guest from "./guest";
 import Header from "./header";
-
-const inter = Inter({ subsets: ["latin"] });
-
 
 export type Guest = {
   firstName: string;
@@ -18,16 +13,16 @@ export type Guest = {
   RSVP: "YES" | "NO" | "MAYBE" | "PENDING";
   id?: number;
   notes: string;
-  event_id:number;
-  event_name?:string|null
+  event_id?: number;
+  event_name?: string | null;
 };
 export type Event = {
-  id:number;
-name:string;
-location:string;
-start_date:string;
-end_date:string;
-notes:string
+  id: number;
+  name: string;
+  location: string;
+  start_date: string;
+  end_date: string;
+  notes: string;
 };
 export type GlobalContent = {
   guests: Array<Guest>;
@@ -42,11 +37,7 @@ export const GuestsContext = createContext<GlobalContent>({
   events: [],
   setEvents: () => {},
 });
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function App({ Component, pageProps }: AppProps) {
   const [guests, setGuests] = useState<Array<Guest>>([]);
   const [events, setEvents] = useState<Array<Event>>([]);
 
@@ -54,7 +45,7 @@ export default function RootLayout({
     guests,
     setGuests,
     events,
-    setEvents
+    setEvents,
   };
 
   const fetchGuestData = async () => {
@@ -92,17 +83,15 @@ export default function RootLayout({
   };
   useEffect(() => {
     fetchGuestData();
-    fetchEventData()
+    fetchEventData();
   }, [guests]);
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <div>
       <GuestsContext.Provider value={contextValue}>
-        <Header/>
-        {children}
-    </GuestsContext.Provider>
-        </body>
-    </html>
+        <Header />
+        <Component {...pageProps} />
+      </GuestsContext.Provider>
+    </div>
   );
 }

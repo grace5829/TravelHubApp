@@ -1,16 +1,15 @@
-"use client";
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
-import { Guest, GuestsContext } from "../layout";
 import SidePanel from "./sidePanel";
+import { GuestsContext,Guest } from "../_app";
 
 const TableWrapper = styled.span`
   margin: 10px;
   display: flex;
   flex-wrap:wrap;
   justify-content: center;
-
 `;
+
 const EachGuest = styled.div`
   box-shadow: 5px 5px 5px gray;
   border-radius: 5px;
@@ -19,6 +18,7 @@ const EachGuest = styled.div`
   background: #f7f4f2;
   width: 23VW
 `;
+
 const EachGuestInfo = styled.span`
   padding: 2px;
   display: flex;
