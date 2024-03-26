@@ -15,7 +15,6 @@ export const IndividualLink = styled(Link)`
   }
 `;
 
-
 export default function NavBar() {
   return (
     <span>
