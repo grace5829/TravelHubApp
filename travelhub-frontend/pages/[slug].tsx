@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
-import { Guest, GuestsContext } from "../_app";
-import SidePanel from "./sidePanel";
+import { Guest, GuestsContext } from "./_app";
+import SidePanel from "./guest/sidePanel";
 import { useRouter } from "next/router";
+import Form from "./guest/form";
 
 const TableWrapper = styled.div`
   margin: 10px;
@@ -27,7 +28,7 @@ const EachGuestInfo = styled.span`
   justify-content: center;
   color: black;
 `;
-export default function AllGuest() {
+export default function DynamicPage() {
   const router = useRouter();
   const { slug, id } = router.query;
   const { guests, setGuests } = useContext(GuestsContext);
@@ -86,6 +87,7 @@ export default function AllGuest() {
 
   return (
     <div>
+        <Form/>
       <TableWrapper>
         {filteredGuests.length>0
           ? filteredGuests.map((guest, index) => (

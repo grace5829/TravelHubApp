@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createContext } from "react";
 import Header from "./header";
 import { ThemeProvider, createGlobalStyle, styled } from "styled-components";
-import Event from "./event";
+import Event from "./events";
 import Guest from "./guest";
 
 

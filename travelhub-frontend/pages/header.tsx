@@ -5,12 +5,11 @@ const HeaderWrapper = styled.span`
   display: flex;
   justify-content: space-between;
   top: 10px;
-  padding-top: 5px;
+  padding: 5px 5px 0px 5px;
   font-family: sans-serif;
   display: flex;
   align-items: center;
   border-bottom: 1px solid black;
-  margin-bottom: 5px;
 `;
 
 const Logo = styled.span`
