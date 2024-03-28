@@ -25,12 +25,16 @@ export default function SidePanel({
   currentGuest,
   setCurrentGuest,
   method,
+  event_name,
+  event_id
 }: {
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
   hidden: boolean;
   currentGuest: Guest;
   setCurrentGuest: React.Dispatch<React.SetStateAction<Guest>>;
   method: string;
+  event_name:any;
+  event_id:number
 }) {
   const { guests, setGuests, events } = useContext(GuestsContext);
 
@@ -88,7 +92,6 @@ export default function SidePanel({
     }
     setHidden(!hidden);
   };
-  console.log(currentGuest);
   return (
     <SidePanels>
       <button onClick={() => setHidden(!hidden)}>X</button>

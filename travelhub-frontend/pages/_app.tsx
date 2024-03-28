@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createContext } from "react";
 import Header from "./header";
 import { ThemeProvider, createGlobalStyle, styled } from "styled-components";
-import Event from "./event";
+import Event from "./events";
 import Guest from "./guest";
 
 
@@ -92,12 +92,13 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   };
 
+
   useEffect(() => {
     fetchGuestData();
     fetchEventData();
   }, [guests]);
 
-  const theme = {
+    const theme = {
     colors: {
       primary: "#007bff",
       secondary: "#6c757d",
@@ -121,7 +122,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <GuestsContext.Provider value={contextValue}>
           <Header/>
         <Component {...pageProps} />
-        </GuestsContext.Provider>
+          </GuestsContext.Provider>
       </ThemeProvider>
     </div>
   );
