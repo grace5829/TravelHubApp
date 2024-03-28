@@ -1,8 +1,7 @@
-import { ChangeEvent, FormEvent, useContext } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect } from "react";
 import styled from "styled-components";
 import React from "react";
 import { Guest, GuestsContext } from "../_app";
-
 
 const SidePanels = styled.span`
   z-index: 1;
@@ -25,23 +24,28 @@ export default function SidePanel({
   currentGuest,
   setCurrentGuest,
   method,
-  event_name,
-  event_id
 }: {
   setHidden: React.Dispatch<React.SetStateAction<boolean>>;
   hidden: boolean;
   currentGuest: Guest;
   setCurrentGuest: React.Dispatch<React.SetStateAction<Guest>>;
   method: string;
-  event_name:any;
-  event_id:number
 }) {
   const { guests, setGuests, events } = useContext(GuestsContext);
-
+  const defaultGuest: Guest = {
+    firstName: "",
+    lastName: "",
+    gender: "FEMALE",
+    age: 0,
+    amountDue: 0,
+    RSVP: "PENDING",
+    notes: "",
+    event_id: currentGuest.event_id,
+    event_name: currentGuest.event_name,
+  };
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
-    console.log(event);
     const name = event.target.name;
     const value = event.target.value;
 
@@ -80,21 +84,19 @@ export default function SidePanel({
     }
 
     if (method === "POST") {
-      setCurrentGuest({
-        firstName: "",
-        lastName: "",
-        gender: "FEMALE",
-        age: 0,
-        amountDue: 0,
-        RSVP: "PENDING",
-        notes: "",
-      });
+      setCurrentGuest(defaultGuest);
     }
     setHidden(!hidden);
   };
+
+  const hideSideBar = () => {
+    setHidden(!hidden);
+    setCurrentGuest(defaultGuest);
+  };
+
   return (
     <SidePanels>
-      <button onClick={() => setHidden(!hidden)}>X</button>
+      <button onClick={() => hideSideBar()}>X</button>
       <FormWrapper onSubmit={handleSubmit}>
         <label htmlFor="firstName">
           First Name:
@@ -157,7 +159,7 @@ export default function SidePanel({
           <select
             name="RSVP"
             onChange={handleChange}
-            defaultValue={currentGuest.RSVP.toUpperCase()}
+            value={currentGuest.RSVP.toUpperCase()}
           >
             <option value="PENDING">Pending</option>
             <option value="YES">Yes</option>
@@ -170,12 +172,8 @@ export default function SidePanel({
           <select
             name="event_id"
             onChange={handleChange}
-            defaultValue={
-              currentGuest.event_name ? currentGuest.event_name : undefined
-            }
+            value={currentGuest.event_id}
           >
-            <option value={undefined}>Pick one</option>
-
             {events.map((event) => (
               <option value={event.id} key={event.id}>
                 {event.name}

@@ -33,8 +33,6 @@ export default function DynamicPage() {
   const { slug, id } = router.query;
   const { guests, setGuests } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
-  const [newGuestId, setNewGuestId] = useState(Number(id));
-//   const [newGuestEventName, setNewEventName] = useState(slug?.toString());
   const [filteredGuests, setFilteredGuests] = useState(guests);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
@@ -44,8 +42,8 @@ export default function DynamicPage() {
     amountDue: 0,
     RSVP: "PENDING",
     notes: "",
-    event_id: newGuestId,
-    // event_name:slug,
+    event_id: Number(id),
+    event_name: slug?.toString() ?? "",
   });
 
   const removeGuest = async (id: number | undefined) => {
@@ -87,7 +85,17 @@ export default function DynamicPage() {
 
   return (
     <div>
-        <Form/>
+        {sidePanel ? (
+        <SidePanel
+          setHidden={setSidePanel}
+          hidden={sidePanel}
+          currentGuest={currentGuest}
+          setCurrentGuest={setCurrentGuest}
+          method="PUT"
+        />
+      ) : 
+      <button onClick={() => setSidePanel(!sidePanel)}> Add Guest</button>
+    }
       <TableWrapper>
         {filteredGuests.length>0
           ? filteredGuests.map((guest, index) => (
@@ -112,17 +120,6 @@ export default function DynamicPage() {
             ))
           : "no guest"}
       </TableWrapper>
-      {sidePanel ? (
-        <SidePanel
-          setHidden={setSidePanel}
-          hidden={sidePanel}
-          currentGuest={currentGuest}
-          setCurrentGuest={setCurrentGuest}
-          method="PUT"
-          event_name={slug}
-          event_id={newGuestId}
-        />
-      ) : null}
     </div>
   );
 }

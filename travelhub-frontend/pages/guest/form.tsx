@@ -17,7 +17,7 @@ export default function Form() {
 
   return (
     <div>
-      {addGuest ? (
+      {/* {addGuest ? (
         <SidePanel
           setHidden={setAddGuest}
           hidden={addGuest}
@@ -27,7 +27,8 @@ export default function Form() {
         />
       ) : (
         <button onClick={() => setAddGuest(!addGuest)}> Add Guest</button>
-      )}
+      )} */}
+      DO NOT USE FORM FILE 
     </div>
   );
 }

@@ -23,8 +23,8 @@ export type Guest = {
   RSVP: "YES" | "NO" | "MAYBE" | "PENDING";
   id?: number;
   notes: string;
-  event_id?: number;
-  event_name?: string | null;
+  event_id: number;
+  event_name: string;
 };
 export type Event = {
   id: number;
