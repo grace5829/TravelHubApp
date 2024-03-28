@@ -92,12 +92,13 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   };
 
+
   useEffect(() => {
     fetchGuestData();
     fetchEventData();
   }, [guests]);
 
-  const theme = {
+    const theme = {
     colors: {
       primary: "#007bff",
       secondary: "#6c757d",
@@ -121,7 +122,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <GuestsContext.Provider value={contextValue}>
           <Header/>
         <Component {...pageProps} />
-        </GuestsContext.Provider>
+          </GuestsContext.Provider>
       </ThemeProvider>
     </div>
   );
