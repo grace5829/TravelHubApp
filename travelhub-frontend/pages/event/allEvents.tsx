@@ -6,6 +6,8 @@ import { GuestsContext } from "../_app";
 const TableWrapper = styled.div`
   margin: 10px;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 const EachEvent =  styled(Link)`
   box-shadow: 5px 5px 5px gray;
@@ -15,6 +17,10 @@ const EachEvent =  styled(Link)`
   margin: 8px;
   padding: 6px;
   background: #f7f4f2;
+
+  &:hover {
+    background-color: #5fbbe3;
+  }
 `;
 const EachEventInfo = styled.span`
   padding: 2px;

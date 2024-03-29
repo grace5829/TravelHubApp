@@ -11,6 +11,12 @@ const TableWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
+const Heading = styled.h3`
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
 
 const EachGuest = styled.div`
   box-shadow: 5px 5px 5px gray;
@@ -85,17 +91,18 @@ export default function DynamicPage() {
 
   return (
     <div>
+      <Heading>{currentGuest.event_name[0].toUpperCase()+currentGuest.event_name.slice(1)}'s Guest List</Heading>
         {sidePanel ? (
-        <SidePanel
+          <SidePanel
           setHidden={setSidePanel}
           hidden={sidePanel}
           currentGuest={currentGuest}
           setCurrentGuest={setCurrentGuest}
           method="PUT"
-        />
-      ) : 
-      <button onClick={() => setSidePanel(!sidePanel)}> Add Guest</button>
-    }
+          />
+          ) : 
+          <button onClick={() => setSidePanel(!sidePanel)}> Add Guest</button>
+        }
       <TableWrapper>
         {filteredGuests.length>0
           ? filteredGuests.map((guest, index) => (
