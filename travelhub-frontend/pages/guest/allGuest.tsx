@@ -44,7 +44,7 @@ export default function AllGuest() {
     RSVP: "PENDING",
     notes: "",
     event_id: newGuestId,
-    // event_name:slug,
+    event_name:typeof slug === 'string'? slug : "",
   });
 
   const removeGuest = async (id: number | undefined) => {
