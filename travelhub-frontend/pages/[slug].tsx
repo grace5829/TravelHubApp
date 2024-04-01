@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { Guest, GuestsContext } from "./_app";
 import SidePanel from "./guest/sidePanel";
 import { useRouter } from "next/router";
-import Form from "./guest/form";
 
 const TableWrapper = styled.div`
   margin: 10px;
