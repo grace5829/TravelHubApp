@@ -27,7 +27,7 @@ export type Guest = {
   event_name: string;
 };
 export type Event = {
-  id: number;
+  id?: number;
   name: string;
   location: string;
   start_date: string;
