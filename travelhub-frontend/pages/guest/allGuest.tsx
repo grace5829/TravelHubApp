@@ -117,8 +117,6 @@ export default function AllGuest() {
           currentGuest={currentGuest}
           setCurrentGuest={setCurrentGuest}
           method="PUT"
-          event_name={slug}
-          event_id={newGuestId}
         />
       ) : null}
     </div>
