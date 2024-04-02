@@ -43,6 +43,7 @@ export default function SidePanel({
     event_id: currentGuest.event_id,
     event_name: currentGuest.event_name,
   };
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -69,6 +70,7 @@ export default function SidePanel({
       alert(errorMessage);
       return;
     }
+
     let API;
     if (method === "POST") {
       API = `http://127.0.0.1:5000/guests`;
@@ -89,7 +91,7 @@ export default function SidePanel({
       }
 
       const result = await response.json();
-      setGuests(result.guests);
+
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }
