@@ -58,6 +58,17 @@ export default function SidePanel({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!currentGuest.firstName.trim() || !currentGuest.lastName.trim()) {
+      let errorMessage = '';
+      if (!currentGuest.firstName.trim()) {
+        errorMessage += 'Please enter a first name.\n';
+      }
+      if (!currentGuest.lastName.trim()) {
+        errorMessage += 'Please enter a last name.\n';
+      }
+      alert(errorMessage);
+      return;
+    }
     let API;
     if (method === "POST") {
       API = `http://127.0.0.1:5000/guests`;
