@@ -33,7 +33,6 @@ export default function AllGuest() {
   const { guests, setGuests } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
   const [newGuestId, setNewGuestId] = useState(Number(id));
-//   const [newGuestEventName, setNewEventName] = useState(slug?.toString());
   const [filteredGuests, setFilteredGuests] = useState(guests);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
