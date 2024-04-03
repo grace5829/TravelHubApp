@@ -30,8 +30,8 @@ export type Event = {
   id?: number;
   name: string;
   location: string;
-  start_date: Date;
-  end_date: Date;
+  start_date: string;
+  end_date: string;
   notes: string;
 };
 export type GlobalContent = {
