@@ -33,11 +33,14 @@ const EachGuestInfo = styled.span`
   justify-content: center;
   color: black;
 `;
+
 export default function DynamicPage() {
   const router = useRouter();
-  const { slug, id } = router.query;
   const { guests, setGuests } = useContext(GuestsContext);
   const [sidePanel, setSidePanel] = useState(false);
+  const { slug, id } = router.query;
+  const [method, setMethod] = useState("POST");
+  const [event_name, setEvent_name] = useState(slug? slug.toString(): 'ERROR');
   const [filteredGuests, setFilteredGuests] = useState(guests);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
@@ -48,7 +51,7 @@ export default function DynamicPage() {
     RSVP: "PENDING",
     notes: "",
     event_id: Number(id),
-    event_name: slug?.toString() ?? "",
+    event_name: event_name,
   });
 
   const removeGuest = async (id: number | undefined) => {
@@ -73,11 +76,13 @@ export default function DynamicPage() {
   };
 
   const edit = (guest: Guest) => {
+    setMethod('PUT')
     setSidePanel(!sidePanel);
     setCurrentGuest(guest);
   };
 
   const filterGuests = (criteria: any, guests:Guest[]) => {
+    // console.log(criteria)
     const filteredList = guests.filter((guest) => {
       return guest.event_name?.toLowerCase() === criteria;
     });
@@ -85,22 +90,31 @@ export default function DynamicPage() {
   };
 
   useEffect(() => {
+    if(typeof slug==='string'){
+      setEvent_name( slug.toString())
+    }
+    // console.log(event_name)
     filterGuests(slug, guests);
   }, [guests]);
 
+
+  const addGuest=()=>{
+    setMethod("POST")
+    setSidePanel(!sidePanel)
+  }
   return (
     <div>
-      <Heading>{currentGuest.event_name[0].toUpperCase()+currentGuest.event_name.slice(1)}'s Guest List</Heading>
+      <Heading>{event_name[0].toUpperCase()+event_name.slice(1)}'s Guest List</Heading>
         {sidePanel ? (
           <SidePanel
           setHidden={setSidePanel}
           hidden={sidePanel}
           currentGuest={currentGuest}
           setCurrentGuest={setCurrentGuest}
-          method="PUT"
+          method={method}
           />
           ) : 
-          <button onClick={() => setSidePanel(!sidePanel)}> Add Guest</button>
+          <button onClick={() =>addGuest()}> Add Guest</button>
         }
       <TableWrapper>
         {filteredGuests.length>0
