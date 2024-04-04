@@ -31,13 +31,7 @@ export default function EventForm({
   setCurrentEvent: React.Dispatch<React.SetStateAction<Event>>;
   method: string;
 }) {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const day = today.getUTCDate();
-  const startDates = new Date(year, month, day);
-  const endDate = new Date(year, month, day);
-  const [startDate, setStartDate] = useState('');
+
 
   const { setEvents, events } = useContext(GuestsContext);
   const defaultEvent: Event = {
@@ -47,13 +41,7 @@ export default function EventForm({
     end_date: "",
     notes: "",
   };
-  function formatDate(date: Date): string {
-    date = new Date(date);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ensure two digits
-    const day = date.getUTCDate().toString().padStart(2, "0"); // Ensure two digits
-    return `${year}-${month}-${day}`;
-  }
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) => {
@@ -113,7 +101,7 @@ export default function EventForm({
     setHidden(!hidden);
     setCurrentEvent(defaultEvent);
   };
-  
+
   return (
     <SidePanels>
       <button onClick={() => hideSideBar()}>X</button>
