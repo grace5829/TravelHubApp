@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useContext, useState } from "react";
 import Link from "next/link";
-import { GuestsContext } from "../_app";
+import { GuestsContext, Event } from "../_app";
 import EventForm from "./eventForm";
 import { useRouter } from "next/router";
 
@@ -30,6 +30,7 @@ const EachEventInfo = styled.span`
   justify-content: center;
 `;
 
+
 export default function AllEvents() {
   const today = new Date();
   const year = today.getFullYear();
@@ -39,36 +40,42 @@ export default function AllEvents() {
   const endDate = new Date(year, month, day);
 
   const { events, setEvents } = useContext(GuestsContext);
-  const [eventForm, seteventForm] = useState(false);
+  const [eventForm, setEventForm] = useState(false);
   const [method, setMethod] = useState("POST");
-  const [currentEvent, setCurrentEvent] = useState({
-    name: "",
-    location: "",
-    start_date: "",
-    end_date: "",
-    notes: "",
+  const [currentEvent, setCurrentEvent] = useState<Event>({
+    notes: "LOTS OF FUN",
+    location: "fesfsfs",
+    start_date: "Tue Apr 02 2024 00:00:00",
+    end_date: "2024-08-05",
+    name: "Friendsgiving",
   });
 
-  const addEvent = () =>{
-    setMethod("POST")
-    seteventForm(!eventForm)
-  }
+  const addEvent = () => {
+    setMethod("POST");
+    setEventForm(!eventForm);
+  };
+  const edit = (event: Event, evt:React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault()
+        setMethod("PUT");
+    setEventForm(!eventForm);
+    setCurrentEvent(event);
+  };
 
   return (
     <div>
       <div>
-
-         {eventForm?
-      <EventForm 
-      setHidden={seteventForm}
-      hidden={eventForm}
-      currentEvent={currentEvent}
-      setCurrentEvent={setCurrentEvent}
-      method={method}
-      /> : 
-      <button onClick={() => addEvent() }> Add Event</button>
-    }
-    </div>
+        {eventForm ? (
+          <EventForm
+            setHidden={setEventForm}
+            hidden={eventForm}
+            currentEvent={currentEvent}
+            setCurrentEvent={setCurrentEvent}
+            method={method}
+          />
+        ) : (
+          <button onClick={() => addEvent()}> Add Event</button>
+        )}
+      </div>
       {events ? (
         <TableWrapper>
           {events.map((event) => (
@@ -79,18 +86,24 @@ export default function AllEvents() {
                 query: { id: event.id },
               }}
             >
+              <button onClick={(evt:React.MouseEvent<HTMLButtonElement>) => edit(event,evt)}>edit</button>
+
               <EachEventInfo>
                 <h3>{event.name} </h3>
               </EachEventInfo>
-              <EachEventInfo>Start:{`${event.start_date.slice(0, 16)}`}</EachEventInfo>
-              <EachEventInfo>End:{`${event.end_date.slice(0, 16)}`}</EachEventInfo>
+              <EachEventInfo>
+                Start:{`${event.start_date.slice(0, 16)}`}
+              </EachEventInfo>
+              <EachEventInfo>
+                End:{`${event.end_date.slice(0, 16)}`}
+              </EachEventInfo>
               <EachEventInfo>Location:{event.location} </EachEventInfo>
               <EachEventInfo>Notes:{event.notes} </EachEventInfo>
             </EachEvent>
+
           ))}
         </TableWrapper>
       ) : null}
-   
     </div>
   );
 }
