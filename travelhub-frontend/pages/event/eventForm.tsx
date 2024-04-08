@@ -142,14 +142,6 @@ export default function EventForm({
             onChange={handleChange}
           />
         </label>
-        {/* <label>
-        Start Date:
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-      </label> */}
         <input type="submit" />
       </FormWrapper>
     </SidePanels>
