@@ -82,7 +82,6 @@ export default function DynamicPage() {
   };
 
   const filterGuests = (criteria: any, guests:Guest[]) => {
-    // console.log(criteria)
     const filteredList = guests.filter((guest) => {
       return guest.event_name?.toLowerCase() === criteria;
     });
@@ -93,7 +92,6 @@ export default function DynamicPage() {
     if(typeof slug==='string'){
       setEvent_name( slug.toString())
     }
-    // console.log(event_name)
     filterGuests(slug, guests);
   }, [guests]);
 
