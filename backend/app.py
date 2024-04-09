@@ -103,7 +103,7 @@ def delete_event(id):
     events=Events.query.order_by(Events.id.asc()).all()
     event_list=[]
     for event in events:
-        event_list.append(format_guest(gueeventst))
+        event_list.append(format_event(event))
     return {'events':event_list}
 
 # update event 
@@ -328,8 +328,39 @@ def create_expense():
 # get expenses for single event
 @app.route('/expenses/<event_id>', methods=['GET'])
 def get_eventExpenses(event_id):
-    expenses=Events.query.filter_by(id=id).one
-    return format_event(event)
+    expenses=Expenses.query.filter_by(event_id=event_id).all()
+
+    return format_event(expenses)
+
+# delete expense
+@app.route('/expense/<id>', methods=['DELETE'])
+def delete_expense(id):
+    expense=Expenses.query.filter_by(id=id).one()
+    db.session.delete(expense)
+    db.session.commit()
+    expenses=Expenses.query.order_by(Expenses.id.asc()).all()
+    expense_list=[]
+    for expense in expenses:
+        expense_list.append(format_expense(expense))
+    return {'expenses':expense_list}
+
+# update expense 
+@app.route('/expenses/<id>', methods=['PUT'])
+def update_expense(id):
+    data = request.json
+    expense_to_update = Expenses.query.get(id)
+
+    if expense_to_update:
+        expense_to_update.description = data.get('notes', expense_to_update.description)
+        expense_to_update.name = data.get('name', expense_to_update.name)
+        expense_to_update.total = data.get('name', expense_to_update.total)
+
+
+        db.session.commit()
+
+        return format_event(expense_to_update)
+
+    return {"error": "Expense not found"}, 404
 
 if __name__=='__main__':
     app.run(debug=True)
