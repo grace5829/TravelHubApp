@@ -53,6 +53,7 @@ def format_event(event):
         'end_date': event.end_date,
         'name': event.name, 
     }
+
 # get all events
 @app.route('/events', methods=['GET'])
 def get_events():
@@ -264,6 +265,71 @@ def update_guest(id):
 
     return {"error": "Guest not found"}, 404
 
+class Expenses(db.Model):
+    __tablename__ = 'expenses'
+    id=db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(25), nullable=False)
+    description=db.Column(db.String(150), nullable=False)
+    total=db.Column(db.Integer, nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event = db.relationship('Events', backref='guests')
+
+    def __repr__(self):
+        return f"<Guest(id={self.id}, name={self.name}, description={self.description},total={self.total}, event_id={self.event_id}, event={self.event} )>"
+
+    def __init__(self, name, description, total, event_id):
+        self.name = name
+        self.description = description
+        self.total = total
+        self.event_id = event_id
+
+def format_expense(expense):
+    formatted_expense = {
+        "name": expense.name,
+        'description': expense.description,
+        'total': expense.total,
+        'event_id': expense.event_id,
+        'id':expense.id
+    }
+    return formatted_expense
+
+# get all expenses
+@app.route('/expenses', methods=['GET'])
+def get_expenses():
+    expenses=Expenses.query.order_by(Expenses.id.asc()).all()
+    expenses_list=[]
+    for expense in expenses:
+        expenses_list.append(format_event(expense))
+    return {'expenses':expenses_list}
+
+# Creating a new expense 
+@app.route('/expenses', methods=['POST'])
+def create_expense():
+    data = request.json
+    app.logger.info(f"Received payload: {data}")
+
+    # Extracting data from the request
+    name = data['name']
+    description=data['description']
+    total=data['total']
+    event_id=data['event_id']
+
+    new_expense = Events(
+        name=name,
+        description=description,
+        total=total,
+        event_id=event_id
+    )
+    db.session.add(new_expense)
+    db.session.commit()
+
+    return format_event(new_expense)
+
+# get expenses for single event
+@app.route('/expenses/<event_id>', methods=['GET'])
+def get_eventExpenses(event_id):
+    expenses=Events.query.filter_by(id=id).one
+    return format_event(event)
 
 if __name__=='__main__':
     app.run(debug=True)
