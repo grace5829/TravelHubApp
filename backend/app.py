@@ -272,7 +272,7 @@ class Expenses(db.Model):
     description=db.Column(db.String(150), nullable=False)
     total=db.Column(db.Integer, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    event = db.relationship('Events', backref='guests')
+    event = db.relationship('Events', backref='expenses')
 
     def __repr__(self):
         return f"<Guest(id={self.id}, name={self.name}, description={self.description},total={self.total}, event_id={self.event_id}, event={self.event} )>"
@@ -299,7 +299,7 @@ def get_expenses():
     expenses=Expenses.query.order_by(Expenses.id.asc()).all()
     expenses_list=[]
     for expense in expenses:
-        expenses_list.append(format_event(expense))
+        expenses_list.append(format_expense(expense))
     return {'expenses':expenses_list}
 
 # Creating a new expense 
@@ -314,7 +314,7 @@ def create_expense():
     total=data['total']
     event_id=data['event_id']
 
-    new_expense = Events(
+    new_expense = Expenses(
         name=name,
         description=description,
         total=total,
@@ -323,14 +323,14 @@ def create_expense():
     db.session.add(new_expense)
     db.session.commit()
 
-    return format_event(new_expense)
+    return format_expense(new_expense)
 
 # get expenses for single event
 @app.route('/expenses/<event_id>', methods=['GET'])
 def get_eventExpenses(event_id):
     expenses=Expenses.query.filter_by(event_id=event_id).all()
 
-    return format_event(expenses)
+    return format_expense(expenses)
 
 # delete expense
 @app.route('/expense/<id>', methods=['DELETE'])
@@ -358,7 +358,7 @@ def update_expense(id):
 
         db.session.commit()
 
-        return format_event(expense_to_update)
+        return format_expense(expense_to_update)
 
     return {"error": "Expense not found"}, 404
 
