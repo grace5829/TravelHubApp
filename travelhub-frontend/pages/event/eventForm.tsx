@@ -1,7 +1,7 @@
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import React from "react";
-import { Guest, Event, GuestsContext } from "../_app";
+import { Event, GuestsContext } from "../_app";
 
 const SidePanels = styled.span`
   z-index: 1;
@@ -33,7 +33,7 @@ export default function EventForm({
 }) {
 
 
-  const { setEvents, events } = useContext(GuestsContext);
+  const { setEvents } = useContext(GuestsContext);
   const defaultEvent: Event = {
     name: "",
     location: "",
