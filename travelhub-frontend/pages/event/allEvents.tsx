@@ -61,6 +61,27 @@ export default function AllEvents() {
     setCurrentEvent(event);
   };
 
+  const removeEvent = async (evt:React.MouseEvent<HTMLButtonElement>,id: number | undefined) => {
+    evt.preventDefault()
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/event/${id}`, {
+        method: "DELETE", // Use the appropriate HTTP method
+        headers: {
+          "Content-Type": "application/json",
+          // Add any additional headers if required
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const result = await response.json();
+      setEvents(result.events);
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
   return (
     <div>
       <div>
@@ -87,6 +108,7 @@ export default function AllEvents() {
               }}
             >
               <button onClick={(evt:React.MouseEvent<HTMLButtonElement>) => edit(event,evt)}>edit</button>
+              <button onClick={(evt:React.MouseEvent<HTMLButtonElement>) => removeEvent(evt, event.id)}>-</button>
 
               <EachEventInfo>
                 <h3>{event.name} </h3>
