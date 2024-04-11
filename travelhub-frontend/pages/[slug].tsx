@@ -118,7 +118,6 @@ export default function DynamicPage() {
         {filteredGuests.length>0
           ? filteredGuests.map((guest, index) => (
               <EachGuest key={guest.id}>
-                <button>+</button>
                 <button onClick={() => removeGuest(guest.id)}>-</button>
                 <button onClick={() => edit(guest)}>edit</button>
                 <span>#{index}</span>
