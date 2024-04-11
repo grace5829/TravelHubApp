@@ -4,7 +4,6 @@ import { createContext } from "react";
 import Header from "./header";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Event from "./events";
-import Guest from "./guest";
 
 
 const GlobalStyle = createGlobalStyle`

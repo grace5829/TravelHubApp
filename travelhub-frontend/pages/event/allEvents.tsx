@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import { GuestsContext, Event } from "../_app";
 import EventForm from "./eventForm";
-import { useRouter } from "next/router";
 
 const TableWrapper = styled.div`
   margin: 10px;
