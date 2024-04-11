@@ -20,7 +20,6 @@ export default function NavBar() {
   return (
     <span>
       <IndividualLink href="/">Home</IndividualLink>
-      <IndividualLink href="/guest">Guests</IndividualLink>
       <IndividualLink href="/events">Events</IndividualLink>
     </span>
   );
