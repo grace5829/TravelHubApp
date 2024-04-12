@@ -217,8 +217,9 @@ def create_guest():
 @app.route('/guests', methods=['GET'])
 def get_guests():
     guests_with_events = db.session.query(Guests, Events.name)\
-        .join(Events, Guests.event_id == Events.id)\
-        .all()    
+    .join(Events, Guests.event_id == Events.id)\
+    .order_by(Guests.id)\
+    .all()
     # guests=Guests.query.order_by(Guests.id.asc()).all()
     guest_list=[]
     for guest, event_name in guests_with_events:
