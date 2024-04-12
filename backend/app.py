@@ -22,8 +22,6 @@ CORS(app)
 # app.app_context().push()
 #  db.create_all()
 
-
-
 class Events(db.Model):
     __tablename__ = 'events'
     id=db.Column(db.Integer, primary_key=True)
@@ -149,11 +147,11 @@ class Guests(db.Model):
     created_at=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     event = db.relationship('Events', backref='guests')
-
+    event_name= db.Column(db.String(20), nullable=False)
     def __repr__(self):
-        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at}, event_id={self.event_id}, event={self.event})>"
+        return f"<Guest(id={self.id}, notes={self.notes}, gender={self.gender}, RSVP={self.RSVP.value}, created_at={self.created_at}, event_id={self.event_id}, event={self.event}, event_name={self.event_name})>"
 
-    def __init__(self, notes, firstName, lastName, age, amountDue, RSVP, gender, event_id):
+    def __init__(self, notes, firstName, lastName, age, amountDue, RSVP, gender, event_id, event_name):
         self.notes = notes
         self.firstName = firstName
         self.lastName = lastName
@@ -162,8 +160,9 @@ class Guests(db.Model):
         self.gender = gender
         self.RSVP = RSVP
         self.event_id=event_id
+        self.event_name=event_name
 
-def format_guest(guests,event_name, include_event_name=False):
+def format_guest(guests):
     formatted_guest = {
         "notes": guests.notes,
         'id': guests.id,
@@ -174,10 +173,9 @@ def format_guest(guests,event_name, include_event_name=False):
         'amountDue': guests.amountDue,
         'gender': guests.gender.value.upper(),
         'RSVP': guests.RSVP.value.upper(),
-        'event_id': guests.event_id
+        'event_id': guests.event_id,
+        'event_name':guests.event_name
     }
-    if include_event_name:
-        formatted_guest['event_name'] = event_name
     
     return formatted_guest
 
@@ -197,6 +195,8 @@ def create_guest():
     RSVP = data['RSVP']
     gender = data['gender']
     event_id=data['event_id']
+    event_name=data['event_name']
+
     # Creating a new guest instance
     new_guest = Guests(
         notes=notes,
@@ -206,12 +206,13 @@ def create_guest():
         age=age,
         amountDue=amountDue,
         RSVP=RSVP,
-        event_id=event_id
+        event_id=event_id,
+        event_name=event_name
     )
 
     db.session.add(new_guest)
     db.session.commit()
-    return format_guest(new_guest, event_name="false" ,include_event_name=False)
+    return format_guest(new_guest)
 
 # get all guests, dont need 'GET'; set by default
 @app.route('/guests', methods=['GET'])
@@ -220,17 +221,16 @@ def get_guests():
     .join(Events, Guests.event_id == Events.id)\
     .order_by(Guests.id)\
     .all()
-    # guests=Guests.query.order_by(Guests.id.asc()).all()
     guest_list=[]
     for guest, event_name in guests_with_events:
-        guest_list.append(format_guest(guest, event_name=event_name, include_event_name=True))
+        guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
 # get single guest
 @app.route('/guest/<id>', methods=['GET'])
 def get_guest(id):
     guest=Guests.query.filter_by(id=id).one()
-    return format_guest(guest, event_name="false", include_event_name=False)
+    return format_guest(guest)
 
 
 # delete guest 
@@ -242,7 +242,7 @@ def delete_guest(id):
     guests=Guests.query.order_by(Guests.id.asc()).all()
     guest_list=[]
     for guest in guests:
-        guest_list.append(format_guest(guest, event_name="false", include_event_name=False))
+        guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
 # update guest 
@@ -260,9 +260,10 @@ def update_guest(id):
         guest_to_update.RSVP = data.get('RSVP', guest_to_update.RSVP)
         guest_to_update.gender = data.get('gender', guest_to_update.gender)
         guest_to_update.event_id = data.get('event', guest_to_update.event_id)
+        guest_to_update.event_name = data.get('event', guest_to_update.event_name)
         db.session.commit()
 
-        return format_guest(guest_to_update, event_name="false", include_event_name=False)
+        return format_guest(guest_to_update)
 
     return {"error": "Guest not found"}, 404
 
