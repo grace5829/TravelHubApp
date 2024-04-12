@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { Guest, GuestsContext } from "./_app";
-import SidePanel from "./guest/sidePanel";
+import SidePanel from "./components/guestForm";
 import { useRouter } from "next/router";
 
 const TableWrapper = styled.div`

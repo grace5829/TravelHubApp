@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import Header from "./header";
+import Header from "./components/header";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Event from "./events";
 
