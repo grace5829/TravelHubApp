@@ -55,7 +55,6 @@ export default function DynamicPage() {
     event_id: Number(id),
     event_name: event_name,
   });
-console.log(currentGuest)
   const removeGuest = async (id: number | undefined) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/guest/${id}`, {
@@ -71,13 +70,11 @@ console.log(currentGuest)
       }
 
       const result = await response.json();
-      console.log('result', result);
       setGuests(result.guests);
     } catch (error: any) {
       console.error("Error fetching data:", error.message);
     }
   };
-// console.log("filtered guest", filteredGuests)
   const edit = (guest: Guest) => {
     setMethod("PUT");
     setSidePanel(!sidePanel);
@@ -85,18 +82,14 @@ console.log(currentGuest)
   };
 
   const filterGuests = (criteria: string, guests: Guest[]) => {
-    console.log('loading new guest list', guests)
     const filteredList = guests.filter((guest) => {
       return guest.event_name?.toLowerCase() === criteria;
     });
-    console.log('filtered list loading', filteredList)
     setFilteredGuests(filteredList);
   };
 
   useEffect(() => {
     if (typeof slug === "string") {
-      console.log("GUEST CHANGED AND FILTER LIST UPDATING")
-      console.log(slug)
       setEvent_name(slug);
       filterGuests(slug, guests);
     }
