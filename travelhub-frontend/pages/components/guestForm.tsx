@@ -60,12 +60,12 @@ export default function GuestForm({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!currentGuest.firstName.trim() || !currentGuest.lastName.trim()) {
-      let errorMessage = '';
+      let errorMessage = "";
       if (!currentGuest.firstName.trim()) {
-        errorMessage += 'Please enter a first name.\n';
+        errorMessage += "Please enter a first name.\n";
       }
       if (!currentGuest.lastName.trim()) {
-        errorMessage += 'Please enter a last name.\n';
+        errorMessage += "Please enter a last name.\n";
       }
       alert(errorMessage);
       return;
@@ -91,14 +91,21 @@ export default function GuestForm({
       }
 
       const result = await response.json();
-      // setGuests(result.guests)
+      let updatedList;
+
+      if (method === "POST") {
+        updatedList = [...guests, result];
+      } else {
+        updatedList = guests.map((guest) =>
+          guest.id === result.id ? result : guest
+        );
+      }
+      setGuests(updatedList);
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }
 
-    if (method === "POST") {
-      setCurrentGuest(defaultGuest);
-    }
+    setCurrentGuest(defaultGuest);
     setHidden(!hidden);
   };
 
