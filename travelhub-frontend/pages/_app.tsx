@@ -130,7 +130,7 @@ export default function App({ Component, pageProps }: AppProps) {
     fetchExpenseData()
   }, []);
 
-    const theme = {
+  const theme = {
     colors: {
       primary: "#007bff",
       secondary: "#6c757d",

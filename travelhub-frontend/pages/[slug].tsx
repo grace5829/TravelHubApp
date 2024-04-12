@@ -40,7 +40,9 @@ export default function DynamicPage() {
   const [sidePanel, setSidePanel] = useState(false);
   const { slug, id } = router.query;
   const [method, setMethod] = useState("POST");
-  const [event_name, setEvent_name] = useState(slug? slug.toString(): 'ERROR');
+  const [event_name, setEvent_name] = useState(
+    slug ? slug.toString() : "ERROR"
+  );
   const [filteredGuests, setFilteredGuests] = useState(guests);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
@@ -53,7 +55,7 @@ export default function DynamicPage() {
     event_id: Number(id),
     event_name: event_name,
   });
-
+console.log(currentGuest)
   const removeGuest = async (id: number | undefined) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/guest/${id}`, {
@@ -69,53 +71,59 @@ export default function DynamicPage() {
       }
 
       const result = await response.json();
+      console.log('result', result);
       setGuests(result.guests);
     } catch (error: any) {
       console.error("Error fetching data:", error.message);
     }
   };
-
+// console.log("filtered guest", filteredGuests)
   const edit = (guest: Guest) => {
-    setMethod('PUT')
+    setMethod("PUT");
     setSidePanel(!sidePanel);
     setCurrentGuest(guest);
   };
 
-  const filterGuests = (criteria: any, guests:Guest[]) => {
+  const filterGuests = (criteria: string, guests: Guest[]) => {
+    console.log('loading new guest list', guests)
     const filteredList = guests.filter((guest) => {
       return guest.event_name?.toLowerCase() === criteria;
     });
+    console.log('filtered list loading', filteredList)
     setFilteredGuests(filteredList);
   };
 
   useEffect(() => {
-    if(typeof slug==='string'){
-      setEvent_name( slug.toString())
+    if (typeof slug === "string") {
+      console.log("GUEST CHANGED AND FILTER LIST UPDATING")
+      console.log(slug)
+      setEvent_name(slug);
+      filterGuests(slug, guests);
     }
-    filterGuests(slug, guests);
-  }, [guests]);
+  }, [guests, slug]);
 
-
-  const addGuest=()=>{
-    setMethod("POST")
-    setSidePanel(!sidePanel)
-  }
+  const addGuest = () => {
+    setMethod("POST");
+    setSidePanel(!sidePanel);
+  };
   return (
     <div>
-      <Heading>{event_name[0].toUpperCase()+event_name.slice(1)}'s Guest List</Heading>
-        {sidePanel ? (
-          <SidePanel
+      <Heading>
+        {event_name[0].toUpperCase() + event_name.slice(1)}'s Guest List
+      </Heading>
+      {sidePanel ? (
+        <SidePanel
           setHidden={setSidePanel}
           hidden={sidePanel}
           currentGuest={currentGuest}
           setCurrentGuest={setCurrentGuest}
           method={method}
-          />
-          ) : 
-          <button onClick={() =>addGuest()}> Add Guest</button>
-        }
+        />
+      ) : (
+        <button onClick={() => addGuest()}> Add Guest</button>
+      )}
       <TableWrapper>
-        {filteredGuests.length>0
+        {filteredGuests.length > 0
           ? filteredGuests.map((guest, index) => (
               <EachGuest key={guest.id}>
                 <button onClick={() => removeGuest(guest.id)}>-</button>
