@@ -31,8 +31,6 @@ export default function EventForm({
   setCurrentEvent: React.Dispatch<React.SetStateAction<Event>>;
   method: string;
 }) {
-
-
   const { events, setEvents } = useContext(EventInfoContext);
   const defaultEvent: Event = {
     name: "",
@@ -47,9 +45,8 @@ export default function EventForm({
   ) => {
     const name = event.target.name;
     const value = event.target.value;
-  
-      setCurrentEvent((values) => ({ ...values, [name]: value }));
-    
+
+    setCurrentEvent((values) => ({ ...values, [name]: value }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -85,21 +82,18 @@ export default function EventForm({
       }
 
       const result = await response.json();
-      // setEvents(result.events);
 
-      console.log(result)
+      let updatedList;
 
-      let updatedList 
-
-      if (method==="POST"){
-        updatedList=[...events, result]
+      if (method === "POST") {
+        updatedList = [...events, result];
       } else {
         updatedList = events.map((event) =>
-      event.id === result.id ? result : event
-    );
+          event.id === result.id ? result : event
+        );
       }
 
-    setEvents(updatedList)
+      setEvents(updatedList);
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }
@@ -142,7 +136,7 @@ export default function EventForm({
           <input
             type="date"
             name="start_date"
-            value={currentEvent.start_date}
+            // value={currentEvent.start_date}
             onChange={handleChange}
           />
         </label>
@@ -151,7 +145,7 @@ export default function EventForm({
           <input
             type="date"
             name="end_date"
-            value={currentEvent.end_date}
+            // value={currentEvent.end_date}
             onChange={handleChange}
           />
         </label>
