@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import React from "react";
-import { Guest, GuestsContext } from "../_app";
+import { Guest, EventInfoContext } from "../_app";
 
 const GuestForms = styled.span`
   z-index: 1;
@@ -31,7 +31,7 @@ export default function GuestForm({
   setCurrentGuest: React.Dispatch<React.SetStateAction<Guest>>;
   method: string;
 }) {
-  const { guests, setGuests, events } = useContext(GuestsContext);
+  const { guests, setGuests, events } = useContext(EventInfoContext);
   const defaultGuest: Guest = {
     firstName: "",
     lastName: "",
@@ -91,7 +91,7 @@ export default function GuestForm({
       }
 
       const result = await response.json();
-
+      // setGuests(result.guests)
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useContext, useState } from "react";
 import Link from "next/link";
-import { GuestsContext, Event } from "./_app";
+import { EventInfoContext, Event } from "./_app";
 import EventForm from "./components/eventForm";
 
 const TableWrapper = styled.div`
@@ -38,7 +38,7 @@ export default function Events() {
   const startDate = new Date(year, month, day);
   const endDate = new Date(year, month, day);
 
-  const { events, setEvents } = useContext(GuestsContext);
+  const { events, setEvents } = useContext(EventInfoContext);
   const [eventForm, setEventForm] = useState(false);
   const [method, setMethod] = useState("POST");
   const [currentEvent, setCurrentEvent] = useState<Event>({

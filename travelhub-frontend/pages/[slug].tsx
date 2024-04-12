@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
-import { Guest, GuestsContext } from "./_app";
+import { Guest, EventInfoContext } from "./_app";
 import SidePanel from "./components/guestForm";
 import { useRouter } from "next/router";
 
@@ -36,7 +36,7 @@ const EachGuestInfo = styled.span`
 
 export default function DynamicPage() {
   const router = useRouter();
-  const { guests, setGuests } = useContext(GuestsContext);
+  const { guests, setGuests } = useContext(EventInfoContext);
   const [sidePanel, setSidePanel] = useState(false);
   const { slug, id } = router.query;
   const [method, setMethod] = useState("POST");

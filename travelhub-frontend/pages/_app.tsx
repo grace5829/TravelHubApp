@@ -50,7 +50,7 @@ export type GlobalContent = {
   setExpenses: React.Dispatch<React.SetStateAction<Expense[]>>;
 };
 
-export const GuestsContext = createContext<GlobalContent>({
+export const EventInfoContext = createContext<GlobalContent>({
   guests: [],
   setGuests: () => {},
   events: [],
@@ -151,10 +151,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <div>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <GuestsContext.Provider value={contextValue}>
+        <EventInfoContext.Provider value={contextValue}>
           <Header/>
         <Component {...pageProps} />
-          </GuestsContext.Provider>
+          </EventInfoContext.Provider>
       </ThemeProvider>
     </div>
   );
