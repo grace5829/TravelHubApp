@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useContext } from "react";
 import styled from "styled-components";
 import React from "react";
-import { Event, GuestsContext } from "../_app";
+import { Event, EventInfoContext } from "../_app";
 
 const SidePanels = styled.span`
   z-index: 1;
@@ -33,7 +33,7 @@ export default function EventForm({
 }) {
 
 
-  const { setEvents } = useContext(GuestsContext);
+  const { events, setEvents } = useContext(EventInfoContext);
   const defaultEvent: Event = {
     name: "",
     location: "",
@@ -65,7 +65,6 @@ export default function EventForm({
       alert(errorMessage);
       return;
     }
-    console.log(currentEvent);
     let API;
     if (method === "POST") {
       API = `http://127.0.0.1:5000/events`;
@@ -86,7 +85,21 @@ export default function EventForm({
       }
 
       const result = await response.json();
-      setEvents(result.events);
+      // setEvents(result.events);
+
+      console.log(result)
+
+      let updatedList 
+
+      if (method==="POST"){
+        updatedList=[...events, result]
+      } else {
+        updatedList = events.map((event) =>
+      event.id === result.id ? result : event
+    );
+      }
+
+    setEvents(updatedList)
     } catch (error: any) {
       console.error("Error fetching data:", error);
     }
@@ -129,7 +142,7 @@ export default function EventForm({
           <input
             type="date"
             name="start_date"
-            // value={formatDate(currentEvent.start_date)}
+            value={currentEvent.start_date}
             onChange={handleChange}
           />
         </label>
@@ -138,7 +151,7 @@ export default function EventForm({
           <input
             type="date"
             name="end_date"
-            // value={formatDate(currentEvent.end_date)}
+            value={currentEvent.end_date}
             onChange={handleChange}
           />
         </label>
