@@ -42,11 +42,11 @@ export default function Events() {
   const [eventForm, setEventForm] = useState(false);
   const [method, setMethod] = useState("POST");
   const [currentEvent, setCurrentEvent] = useState<Event>({
-    notes: "LOTS OF FUN",
-    location: "fesfsfs",
-    start_date: "Tue Apr 02 2024 00:00:00",
-    end_date: "2024-08-05",
-    name: "Friendsgiving",
+    notes: "",
+    location: "",
+    start_date: "",
+    end_date: "",
+    name: "",
   });
 
   const addEvent = () => {
