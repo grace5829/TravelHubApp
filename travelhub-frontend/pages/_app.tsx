@@ -33,11 +33,21 @@ export type Event = {
   end_date: string;
   notes: string;
 };
+export type Expense = {
+  id?: number;
+  name: string;
+  description: string;
+  total: number;
+  event_id: number;
+  event_name: string;
+};
 export type GlobalContent = {
   guests: Array<Guest>;
   setGuests: React.Dispatch<React.SetStateAction<Guest[]>>;
   events: Array<Event>;
   setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  expenses: Array<Expense>;
+  setExpenses: React.Dispatch<React.SetStateAction<Expense[]>>;
 };
 
 export const GuestsContext = createContext<GlobalContent>({
@@ -45,16 +55,21 @@ export const GuestsContext = createContext<GlobalContent>({
   setGuests: () => {},
   events: [],
   setEvents: () => {},
+  expenses: [],
+  setExpenses: () => {},
 });
 export default function App({ Component, pageProps }: AppProps) {
   const [guests, setGuests] = useState<Array<Guest>>([]);
   const [events, setEvents] = useState<Array<Event>>([]);
+  const [expenses, setExpenses] = useState<Array<Expense>>([]);
 
   const contextValue: GlobalContent = {
     guests,
     setGuests,
     events,
     setEvents,
+    expenses, 
+    setExpenses
   };
 
   const fetchGuestData = async () => {
@@ -90,12 +105,30 @@ export default function App({ Component, pageProps }: AppProps) {
       console.error("Error fetching data:", error.message);
     }
   };
+  const fetchExpenseData = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/expenses", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const result = await response.json();
+
+      setExpenses(result.expenses);
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
 
 
   useEffect(() => {
     fetchGuestData();
     fetchEventData();
-  }, [guests]);
+    fetchExpenseData()
+  }, []);
 
     const theme = {
     colors: {
