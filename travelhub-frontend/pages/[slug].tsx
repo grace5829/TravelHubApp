@@ -3,6 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import { Guest, EventInfoContext } from "./_app";
 import SidePanel from "./components/guestForm";
 import { useRouter } from "next/router";
+import Tabs from "./components/tabs";
+import AllGuests from "./components/allGuests";
+import AllExpenses from "./components/allExpenses";
 
 const TableWrapper = styled.div`
   margin: 10px;
@@ -10,6 +13,7 @@ const TableWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
+
 const Heading = styled.h3`
   margin: 10px;
   display: flex;
@@ -36,10 +40,11 @@ const EachGuestInfo = styled.span`
 
 export default function DynamicPage() {
   const router = useRouter();
-  const { guests, setGuests } = useContext(EventInfoContext);
+  const { guests, setGuests, expenses, setExpenses } = useContext(EventInfoContext);
   const [sidePanel, setSidePanel] = useState(false);
   const { slug, id } = router.query;
   const [method, setMethod] = useState("POST");
+  const [tab, setTab] = useState("POST");
   const [event_name, setEvent_name] = useState(
     slug ? slug.toString() : "ERROR"
   );
@@ -87,7 +92,7 @@ export default function DynamicPage() {
     });
     setFilteredGuests(filteredList);
   };
-
+console.log(expenses)
   useEffect(() => {
     if (typeof slug === "string") {
       setEvent_name(slug);
@@ -101,6 +106,10 @@ export default function DynamicPage() {
   };
   return (
     <div>
+      <Tabs config={[
+        {header:"Guests", component:<AllGuests/>},
+        {header:"Expenses", component:<AllExpenses/>}
+      ]}></Tabs>
       <Heading>
         {event_name[0].toUpperCase() + event_name.slice(1)}'s Guest List
       </Heading>
@@ -138,6 +147,17 @@ export default function DynamicPage() {
             ))
           : "no guest"}
       </TableWrapper>
+      <div> 
+        {expenses? 
+     expenses.map((expense, index) => (
+      <div> {expense.name}</div>
+
+     ))
+     
+     : <div> No expenses</div>
+        
+        }
+      </div>
     </div>
   );
 }
