@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { EventInfoContext, Guest } from "../_app";
 import GuestForm from "./guestForm";
 
-
-
 const TableWrapper = styled.div`
   margin: 10px;
   display: flex;
@@ -39,11 +37,10 @@ const EachGuestInfo = styled.span`
 
 export default function AllGuest() {
   const router = useRouter();
-  const { guests, setGuests, expenses, setExpenses } = useContext(EventInfoContext);
+  const { guests, setGuests } = useContext(EventInfoContext);
   const [sidePanel, setSidePanel] = useState(false);
   const { slug, id } = router.query;
   const [method, setMethod] = useState("POST");
-  const [tab, setTab] = useState("POST");
   const [event_name, setEvent_name] = useState(
     slug ? slug.toString() : "ERROR"
   );
@@ -91,7 +88,6 @@ export default function AllGuest() {
     });
     setFilteredGuests(filteredList);
   };
-console.log(expenses)
   useEffect(() => {
     if (typeof slug === "string") {
       setEvent_name(slug);
@@ -142,7 +138,6 @@ console.log(expenses)
             ))
           : "no guest"}
       </TableWrapper>
-
     </div>
   );
 }
