@@ -30,12 +30,11 @@ const EachGuest = styled.div`
 const EachGuestInfo = styled.span`
   padding: 2px;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   color: black;
 `;
 
-export default function AllGuest() {
+export default function AllGuest({ config }: any) {
   const router = useRouter();
   const { guests, setGuests } = useContext(EventInfoContext);
   const [sidePanel, setSidePanel] = useState(false);
@@ -102,7 +101,7 @@ export default function AllGuest() {
   return (
     <div>
       <Heading>
-        {event_name[0].toUpperCase() + event_name.slice(1)}'s Guest List
+        {config.title}'s Guest List
       </Heading>
       {sidePanel ? (
         <GuestForm
