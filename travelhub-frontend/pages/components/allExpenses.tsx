@@ -21,25 +21,31 @@ const EachExpense = styled.div`
 `;
 
 const EachExpenseInfo = styled.span`
-  color: black;
 `;
 
 const EachExpenseBody = styled.span`
-  color: black;
   display: flex;
   justify-content:space-between;
 `;
 const EachExpenseTitle = styled.span`
   font-weight: bold;
-  color: black;
+`;
+const TotalExpenses = styled.div`
+  font-weight: bold;
+  border-radius: 5px;
+  margin: 8px;
+  padding: 6px;  display: flex;
+  justify-content:flex-end;
 `;
 export default function AllExpenses({ config }: any) {
   const { expenses, setExpenses } = useContext(EventInfoContext);
 const [totalExpenses, setTotalExpenses]= useState(0)
 useEffect(() => {
+    let currentTotal=0
 expenses.map((expense)=>(
-    setTotalExpenses(totalExpenses+expense.total)
-))
+    currentTotal+=expense.total)
+)
+setTotalExpenses(currentTotal)
 }, [expenses])
 
   return (
@@ -64,9 +70,12 @@ expenses.map((expense)=>(
       ) : (
         <div> No expenses</div>
       )}
-      <div>
-        {totalExpenses}
-      </div>
+      <TotalExpenses>
+        <span>
+       Total: ${totalExpenses}
+        </span>
+            
+      </TotalExpenses>
     </div>
   );
 }
