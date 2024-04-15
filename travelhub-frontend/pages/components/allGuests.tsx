@@ -43,7 +43,6 @@ export default function AllGuest({ config }: any) {
   const [event_name, setEvent_name] = useState(
     slug ? slug.toString() : "ERROR"
   );
-  const [filteredGuests, setFilteredGuests] = useState(guests);
   const [currentGuest, setCurrentGuest] = useState<Guest>({
     firstName: "",
     lastName: "",
@@ -81,16 +80,9 @@ export default function AllGuest({ config }: any) {
     setCurrentGuest(guest);
   };
 
-  const filterGuests = (criteria: string, guests: Guest[]) => {
-    const filteredList = guests.filter((guest) => {
-      return guest.event_name?.toLowerCase() === criteria;
-    });
-    setFilteredGuests(filteredList);
-  };
   useEffect(() => {
     if (typeof slug === "string") {
       setEvent_name(slug);
-      filterGuests(slug, guests);
     }
   }, [guests, slug]);
 
@@ -115,8 +107,7 @@ export default function AllGuest({ config }: any) {
         <button onClick={() => addGuest()}> Add Guest</button>
       )}
       <TableWrapper>
-        {filteredGuests.length > 0
-          ? filteredGuests.map((guest, index) => (
+        {config.filteredGuests.map((guest:Guest, index:number) => (
               <EachGuest key={guest.id}>
                 <button onClick={() => removeGuest(guest.id)}>-</button>
                 <button onClick={() => edit(guest)}>edit</button>
@@ -134,8 +125,7 @@ export default function AllGuest({ config }: any) {
                 <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
                 <EachGuestInfo>Event Name: {guest.event_name}</EachGuestInfo>
               </EachGuest>
-            ))
-          : "no guest"}
+            ))}
       </TableWrapper>
     </div>
   );
