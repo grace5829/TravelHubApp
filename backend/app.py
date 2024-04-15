@@ -222,16 +222,25 @@ def get_guests():
     .order_by(Guests.id)\
     .all()
     guest_list=[]
-    for guest, event_name in guests_with_events:
+    for guest in guests_with_events:
         guest_list.append(format_guest(guest))
     return {'guests':guest_list}
 
-# get single guest
-@app.route('/guest/<id>', methods=['GET'])
-def get_guest(id):
-    guest=Guests.query.filter_by(id=id).one()
-    return format_guest(guest)
+# # get single guest
+# @app.route('/guest/<id>', methods=['GET'])
+# def get_guest(id):
+#     guest=Guests.query.filter_by(id=id).one()
+#     return format_guest(guest)
 
+# get guests for single event
+@app.route('/guests/<event_id>', methods=['GET'])
+def get_eventGuests(event_id):
+    guest_withID=Guests.query.filter_by(event_id=event_id).all()
+    guest_list=[]
+
+    for guest in guest_withID:
+        guest_list.append(format_guest(guest))
+    return {'guests':guest_list}
 
 # delete guest 
 @app.route('/guest/<id>', methods=['DELETE'])
@@ -330,9 +339,13 @@ def create_expense():
 # get expenses for single event
 @app.route('/expenses/<event_id>', methods=['GET'])
 def get_eventExpenses(event_id):
-    expenses=Expenses.query.filter_by(event_id=event_id).all()
+    expenses_withID=Expenses.query.filter_by(event_id=event_id).all()
+    expense_list=[]
 
-    return format_expense(expenses)
+    for expense in expenses_withID:
+        expense_list.append(format_expense(expense))
+    return{'expenses':expense_list}
+
 
 # delete expense
 @app.route('/expense/<id>', methods=['DELETE'])
