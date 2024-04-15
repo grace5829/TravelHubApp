@@ -30,21 +30,29 @@ const EachExpenseBody = styled.span`
 const EachExpenseTitle = styled.span`
   font-weight: bold;
 `;
-const TotalExpenses = styled.div`
+const TotalExpensesArea = styled.div`
   font-weight: bold;
-  border-radius: 5px;
   margin: 8px;
-  padding: 6px;  display: flex;
-  justify-content:flex-end;
+  padding: 6px;  
+  flex-direction: column;
+  display: flex;
+  float:right;
+`;
+const TotalExpensesItem = styled.div`
+display: flex;
+float:right;
 `;
 export default function AllExpenses({ config }: any) {
   const { expenses, setExpenses } = useContext(EventInfoContext);
 const [totalExpenses, setTotalExpenses]= useState(0)
+const [totalExpensesPerPerson, setTotalExpensesPerPerson]= useState(0)
 useEffect(() => {
     let currentTotal=0
 expenses.map((expense)=>(
     currentTotal+=expense.total)
 )
+console.log(currentTotal/config.filteredGuests.length)
+setTotalExpensesPerPerson(currentTotal/config.filteredGuests.length.toFixed(2))
 setTotalExpenses(currentTotal)
 }, [expenses])
 
@@ -70,12 +78,15 @@ setTotalExpenses(currentTotal)
       ) : (
         <div> No expenses</div>
       )}
-      <TotalExpenses>
-        <span>
-       Total: ${totalExpenses}
-        </span>
+      <TotalExpensesArea>
+        <TotalExpensesItem>
+        Total: ${totalExpenses}
+        </TotalExpensesItem>
+        <TotalExpensesItem>
+       Total PP: ${totalExpensesPerPerson}
+        </TotalExpensesItem>
+      </TotalExpensesArea>
             
-      </TotalExpenses>
     </div>
   );
 }
