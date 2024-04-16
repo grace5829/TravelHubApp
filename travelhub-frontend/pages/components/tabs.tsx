@@ -11,20 +11,19 @@ const TabsArea = styled.div`
   position: sticky;
   top: 20px;
   height:100%;
-  width:15vw;
+  width:10vw;
   font-size:10px;
   z-index: 1;
   top: 0; 
   left: 0;
   overflow-x: hidden; 
-  padding-top: 60px; 
+  border-radius: 5px;
+  background: #f7f4f2;
+
   `;
 const EachTab = styled.h3`
-  box-shadow: 5px 5px 5px gray;
-  border-radius: 5px;
-  margin: 8px;
-  padding: 6px;
-  background: #f7f4f2;
+  margin: 0px 8px;
+  padding: 5px;
 `;
 export default function Tabs({ config }: any) {
   const [activeTab, setActiveTab] = useState(0);
