@@ -9,6 +9,15 @@ const Heading = styled.h3`
   flex-wrap: wrap;
   justify-content: center;
 `;
+const ExpensesArea = styled.div`
+width:90vw;
+display: flex;
+flex-direction: column;
+padding: 6px;
+// justify-content: center;
+align-items:center;
+
+`;
 
 const EachExpense = styled.div`
   box-shadow: 5px 5px 5px gray;
@@ -17,7 +26,9 @@ const EachExpense = styled.div`
   padding: 6px;
   display: flex;
   background: #f7f4f2;
+  width:80vw;
   flex-direction: column;
+
 `;
 
 const EachExpenseInfo = styled.span`
@@ -58,7 +69,9 @@ setTotalExpenses(currentTotal)
 
   return (
     <div>
+
       <Heading>{config.title}'s Expenses List</Heading>
+    <ExpensesArea>
       {expenses ? (
         expenses.map((expense, index) => (
           <EachExpense>
@@ -78,6 +91,8 @@ setTotalExpenses(currentTotal)
       ) : (
         <div> No expenses</div>
       )}
+          </ExpensesArea>
+
       <TotalExpensesArea>
         <TotalExpensesItem>
         Total: ${totalExpenses}
@@ -86,7 +101,7 @@ setTotalExpenses(currentTotal)
        Total PP: ${totalExpensesPerPerson}
         </TotalExpensesItem>
       </TotalExpensesArea>
-            
-    </div>
+      </div>
+
   );
 }
