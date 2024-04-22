@@ -38,8 +38,8 @@ export default function AllGuest({ config }: any) {
   const router = useRouter();
   const { guests, setGuests } = useContext(EventInfoContext);
   const [sidePanel, setSidePanel] = useState(false);
-  const { slug, id } = router.query;
   const [method, setMethod] = useState("POST");
+  const { slug, id } = router.query;
   const [event_name, setEvent_name] = useState(
     slug ? slug.toString() : "ERROR"
   );
@@ -92,9 +92,7 @@ export default function AllGuest({ config }: any) {
   };
   return (
     <div>
-      <Heading>
-        {config.title}'s Guest List
-      </Heading>
+      <Heading>{config.title}'s Guest List</Heading>
       {sidePanel ? (
         <GuestForm
           setHidden={setSidePanel}
@@ -107,25 +105,27 @@ export default function AllGuest({ config }: any) {
         <button onClick={() => addGuest()}> Add Guest</button>
       )}
       <TableWrapper>
-        {config.filteredGuests.map((guest:Guest, index:number) => (
-              <EachGuest key={guest.id}>
-                <button onClick={() => removeGuest(guest.id)}>-</button>
-                <button onClick={() => edit(guest)}>edit</button>
-                <span>#{index}</span>
-                <EachGuestInfo>
-                  <h3>
-                    {" "}
-                    {guest.firstName} {guest.lastName}
-                  </h3>
-                </EachGuestInfo>
-                <EachGuestInfo>{guest.gender}</EachGuestInfo>
-                <EachGuestInfo>Age: {guest.age} </EachGuestInfo>
-                <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
-                <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
-                <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
-                <EachGuestInfo>Event Name: {guest.event_name}</EachGuestInfo>
-              </EachGuest>
-            ))}
+        {config.filteredGuests.map((guest: Guest, index: number) => (
+          <EachGuest key={guest.id}>
+            <button onClick={() => removeGuest(guest.id)}>-</button>
+            <button onClick={() => edit(guest)}>edit</button>
+            <span>#{index}</span>
+            <EachGuestInfo>
+              <h3>
+                {" "}
+                {guest.firstName} {guest.lastName}
+              </h3>
+            </EachGuestInfo>
+            <EachGuestInfo>{guest.gender}</EachGuestInfo>
+            <EachGuestInfo>Age: {guest.age} </EachGuestInfo>
+            <EachGuestInfo>RSVP: {guest.RSVP}</EachGuestInfo>
+            <EachGuestInfo>Amount due: ${guest.amountDue}</EachGuestInfo>
+            {guest.notes ? (
+              <EachGuestInfo>Notes: {guest.notes}</EachGuestInfo>
+            ) : null}
+            <EachGuestInfo>Event Name: {guest.event_name}</EachGuestInfo>
+          </EachGuest>
+        ))}
       </TableWrapper>
     </div>
   );
