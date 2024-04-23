@@ -100,7 +100,7 @@ export default function Events() {
         <TableWrapper>
           {events.map((event) => (
             <EachEvent
-              key={event.location + event.name}
+              key={event.location + event.id}
               href={{
                 pathname: `/${event.name.toLowerCase()}`,
                 query: { id: event.id },
