@@ -86,6 +86,31 @@ const addExpense = () => {
   setMethod("POST");
   setSidePanel(!sidePanel);
 };
+const removeExpense = async (id: number | undefined) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:5000/expense/${id}`, {
+      method: "DELETE", // Use the appropriate HTTP method
+      headers: {
+        "Content-Type": "application/json",
+        // Add any additional headers if required
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const result = await response.json();
+    setExpenses(result.expenses);
+  } catch (error: any) {
+    console.error("Error fetching data:", error.message);
+  }
+};
+const edit = (expense: Expense) => {
+  setMethod("PUT");
+  setSidePanel(!sidePanel);
+  setCurrentExpense(expense);
+};
   return (
     <div>
 
@@ -104,8 +129,10 @@ const addExpense = () => {
     <ExpensesArea>
       {expenses ? (
         expenses.map((expense, index) => (
-          <EachExpense>
-            
+          <EachExpense key={expense.name+expense.id}>
+            <button onClick={() => removeExpense(expense.id)}>-</button>
+            <button onClick={() => edit(expense)}>edit</button>
+
             <EachExpenseTitle className={expense.name + index}>
               {expense.name}
             </EachExpenseTitle>
