@@ -149,6 +149,7 @@ export default function App({ Component, pageProps }: AppProps) {
   };
   return (
     <div>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <EventInfoContext.Provider value={contextValue}>
