@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-const EventInfoArea = styled.h3`
+const EventInfoArea = styled.div`
   display: flex;
   flex-direction: row;
   // background:black

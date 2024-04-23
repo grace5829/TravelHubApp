@@ -18,6 +18,10 @@ const Heading = styled.h3`
   justify-content: center;
 `;
 
+const SubHeading = styled.div`
+  margin: 10px;
+`;
+
 const EachGuest = styled.div`
   box-shadow: 5px 5px 5px gray;
   border-radius: 5px;
@@ -92,18 +96,19 @@ export default function AllGuest({ config }: any) {
   };
   return (
     <div>
-      <Heading>{config.title}'s Guest List</Heading>
+      <Heading>{config.title} Guest List</Heading>
+      <SubHeading>Total guests:{guests.length} </SubHeading>
       {sidePanel ? (
-        <GuestForm
+          <GuestForm
           setHidden={setSidePanel}
           hidden={sidePanel}
           currentGuest={currentGuest}
           setCurrentGuest={setCurrentGuest}
           method={method}
-        />
-      ) : (
-        <button onClick={() => addGuest()}> Add Guest</button>
-      )}
+          />
+          ) : (
+              <button onClick={() => addGuest()}> Add Guest</button>
+              )}
       <TableWrapper>
         {config.filteredGuests.map((guest: Guest, index: number) => (
           <EachGuest key={guest.id}>
@@ -112,7 +117,6 @@ export default function AllGuest({ config }: any) {
             <span>#{index}</span>
             <EachGuestInfo>
               <h3>
-                {" "}
                 {guest.firstName} {guest.lastName}
               </h3>
             </EachGuestInfo>
