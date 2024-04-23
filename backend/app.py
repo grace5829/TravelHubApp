@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from enum import Enum
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -103,6 +104,39 @@ def delete_event(id):
     for event in events:
         event_list.append(format_event(event))
     return {'events':event_list}
+
+
+#get next event
+@app.route('/next-event', methods=['GET'])
+def get_next_event():
+    # Get today's date
+    today = datetime.now().date()
+
+    # Query the database to find the next event after today's date
+    next_event = Events.query.filter(Events.start_date >= today).order_by(Events.start_date.asc()).first()
+
+    if next_event:
+        # Format the event data
+        formatted_event = format_event(next_event)
+        return {'next_event': formatted_event}
+    else:
+        return {'message': 'No upcoming events found'}
+
+#get recent previous event 
+@app.route('/previous-event', methods=['GET'])
+def get_previous_event():
+    # Get today's date
+    today = datetime.now().date()
+
+    # Query the database to find the most recent previous event
+    previous_event = Events.query.filter(Events.start_date < today).order_by(Events.start_date.desc()).first()
+
+    if previous_event:
+        # Format the event data
+        formatted_event = format_event(previous_event)
+        return {'previous_event': formatted_event}
+    else:
+        return {'message': 'No previous events found'}
 
 # update event 
 @app.route('/events/<id>', methods=['PUT'])
@@ -366,9 +400,9 @@ def update_expense(id):
     expense_to_update = Expenses.query.get(id)
 
     if expense_to_update:
-        expense_to_update.description = data.get('notes', expense_to_update.description)
+        expense_to_update.description = data.get('description', expense_to_update.description)
         expense_to_update.name = data.get('name', expense_to_update.name)
-        expense_to_update.total = data.get('name', expense_to_update.total)
+        expense_to_update.total = data.get('total', expense_to_update.total)
 
 
         db.session.commit()
