@@ -23,11 +23,10 @@ const SubHeading = styled.div`
 `;
 
 const EachGuest = styled.div`
-  box-shadow: 5px 5px 5px gray;
   border-radius: 5px;
   margin: 8px;
   padding: 6px;
-  background: #f7f4f2;
+  background: #324a5f;
   width: 23vw;
 `;
 
@@ -35,9 +34,14 @@ const EachGuestInfo = styled.span`
   padding: 2px;
   display: flex;
   justify-content: center;
-  color: black;
+  color:#f0e2d3;
 `;
-
+const ButtonWrapper = styled.span`
+  display: flex;
+  float: right;
+  cursor: pointer;
+  font: 10px;
+`;
 export default function AllGuest({ config }: any) {
   const router = useRouter();
   const { guests, setGuests } = useContext(EventInfoContext);
@@ -112,9 +116,12 @@ export default function AllGuest({ config }: any) {
       <TableWrapper>
         {config.filteredGuests.map((guest: Guest, index: number) => (
           <EachGuest key={guest.id}>
-            <button onClick={() => removeGuest(guest.id)}>-</button>
-            <button onClick={() => edit(guest)}>edit</button>
-            <span>#{index}</span>
+            <button onClick={() => removeGuest(guest.id)}><span className="material-symbols-outlined">
+delete
+</span></button>
+            <button onClick={() => edit(guest)}><span className="material-symbols-outlined">
+edit
+</span></button>
             <EachGuestInfo>
               <h3>
                 {guest.firstName} {guest.lastName}
