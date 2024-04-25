@@ -11,6 +11,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color:#111111;
+    color:#f0e2d3;
+
     }
 `;
 export type Guest = {
@@ -149,14 +152,13 @@ export default function App({ Component, pageProps }: AppProps) {
   };
   return (
     <div>
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-      <ThemeProvider theme={theme}>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />      {/* <ThemeProvider theme={theme}> */}
         <GlobalStyle />
         <EventInfoContext.Provider value={contextValue}>
           <Header/>
         <Component {...pageProps} />
           </EventInfoContext.Provider>
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </div>
   );
 }

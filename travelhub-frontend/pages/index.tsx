@@ -10,7 +10,6 @@ const TableWrapper = styled.div`
   justify-content: center;
 `;
 const EachEvent = styled(Link)`
-  box-shadow: 5px 5px 5px gray;
   border-radius: 5px;
   color: black;
   text-decoration: none;

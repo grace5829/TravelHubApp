@@ -5,6 +5,7 @@ const HeaderWrapper = styled.span`
   display: flex;
   justify-content: space-between;
   top: 10px;
+  background-color:#1b2a41;
   padding: 5px 5px 0px 5px;
   font-family: sans-serif;
   display: flex;

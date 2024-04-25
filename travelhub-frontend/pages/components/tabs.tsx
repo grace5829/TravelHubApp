@@ -18,7 +18,7 @@ const TabsArea = styled.div`
   left: 0;
   overflow-x: hidden; 
   border-radius: 5px;
-  background: #f7f4f2;
+  background-color:#1b2a41;
 
   `;
 const EachTab = styled.h3`
