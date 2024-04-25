@@ -3,27 +3,33 @@ import styled from "styled-components";
 const EventInfoArea = styled.div`
   display: flex;
   flex-direction: row;
-  // background:black
 `;
 const TabsArea = styled.div`
   display: flex;
   flex-direction: column;
   position: sticky;
-  top: 20px;
   height:100%;
-  width:10vw;
-  font-size:10px;
+    font-size:10px;
   z-index: 1;
-  top: 0; 
-  left: 0;
-  overflow-x: hidden; 
+  top: 10px; 
+  // overflow-x: hidden; 
   border-radius: 5px;
   background-color:#1b2a41;
 
   `;
-const EachTab = styled.h3`
+const EachTab = styled.div`
   margin: 0px 8px;
-  padding: 5px;
+  cursor:pointer;
+  display:flex;
+  justify-content:center;
+  width: fit-content;
+  block-size: fit-content;
+    font-size:12px;
+  padding: 9px;
+  margin: 0px 5px;
+`;
+const BodyArea = styled.div`
+margin:15px;
 `;
 export default function Tabs({ config }: any) {
   const [activeTab, setActiveTab] = useState(0);
@@ -35,7 +41,7 @@ export default function Tabs({ config }: any) {
           <EachTab onClick={() => setActiveTab(index)}>{entry.header}</EachTab>
         ))}
       </TabsArea>
-      <div>{config[activeTab].component}</div>
+      <BodyArea>{config[activeTab].component}</BodyArea>
     </EventInfoArea>
   );
 }

@@ -29,7 +29,6 @@ const EachExpense = styled.div`
 `;
 
 const EachExpenseInfo = styled.span`
-cursor: pointer;
 `;
 
 const EachExpenseBody = styled.span`
@@ -47,13 +46,13 @@ const TotalExpensesArea = styled.div`
   display: flex;
   float: right;
 `;
-const TotalExpensesItem = styled.div`
-`;
+const TotalExpensesItem = styled.div``;
 const ButtonWrapper = styled.span`
   display: flex;
   float: right;
+  margin:2px;
+  align-items: center;
   cursor: pointer;
-  font: 10px;
 `;
 export default function AllExpenses({ config }: any) {
   const { expenses, setExpenses } = useContext(EventInfoContext);
@@ -123,29 +122,37 @@ export default function AllExpenses({ config }: any) {
           method={method}
         />
       ) : (
-        <button onClick={() => addExpense()}> Add Expense</button>
+        <ButtonWrapper onClick={() => addExpense()}>
+          <span className="material-symbols-outlined">add_box</span>
+          <span>Add Expense</span>
+        </ButtonWrapper>
       )}
       <ExpensesArea>
         {expenses ? (
           expenses.map((expense, index) => (
             <EachExpense key={expense.name + expense.id}>
               <div>
-                  <ButtonWrapper onClick={() => removeExpense(expense.id)} className="material-symbols-outlined">
-                    delete
-                  </ButtonWrapper>
-                  <ButtonWrapper onClick={() => edit(expense)} className="material-symbols-outlined">
-                    edit
-                  </ButtonWrapper>
+                <ButtonWrapper
+                  onClick={() => removeExpense(expense.id)}
+                  className="material-symbols-outlined"
+                >
+                  delete
+                </ButtonWrapper>
+                <ButtonWrapper
+                  onClick={() => edit(expense)}
+                  className="material-symbols-outlined"
+                >
+                  edit
+                </ButtonWrapper>
                 <EachExpenseTitle className={expense.name + index}>
                   {expense.name}
                 </EachExpenseTitle>
               </div>
               <EachExpenseBody>
                 <EachExpenseInfo className={expense.name + index}>
-                Description:{expense.description ? 
-                    expense.description
-                     : "N/A"}
-                    </EachExpenseInfo>
+                  Description:
+                  {expense.description ? expense.description : "N/A"}
+                </EachExpenseInfo>
                 <EachExpenseInfo className={expense.name + index}>
                   ${expense.total}
                 </EachExpenseInfo>
