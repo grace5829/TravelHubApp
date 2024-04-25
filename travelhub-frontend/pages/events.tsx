@@ -9,18 +9,29 @@ const TableWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  `;
+  const ButtonWrapper = styled.span`
+  display: flex;
+  float: right;
+  cursor: wait;
+  z-index:1;
+  
 `;
 const EachEvent = styled(Link)`
-  box-shadow: 5px 5px 5px gray;
   border-radius: 5px;
-  color: black;
   text-decoration: none;
+  color: #f0e2d3;
   margin: 8px;
-  padding: 6px;
-  background: #f7f4f2;
+  padding: 5px 10px;
+  background: #324a5f;
 
+  // &:hover ${ButtonWrapper}{
   &:hover {
     background-color: #5fbbe3;
+      // display: none;
+        // background: #324a5f;
+      
+  
   }
 `;
 const EachEventInfo = styled.span`
@@ -29,6 +40,10 @@ const EachEventInfo = styled.span`
   justify-content: center;
 `;
 
+
+const ButtonsWrapper = styled.span`
+position:absolute;
+`;
 
 export default function Events() {
   const today = new Date();
@@ -53,15 +68,18 @@ export default function Events() {
     setMethod("POST");
     setEventForm(!eventForm);
   };
-  const edit = (event: Event, evt:React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault()
-        setMethod("PUT");
+  const edit = (event: Event, evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setMethod("PUT");
     setEventForm(!eventForm);
     setCurrentEvent(event);
   };
 
-  const removeEvent = async (evt:React.MouseEvent<HTMLButtonElement>,id: number | undefined) => {
-    evt.preventDefault()
+  const removeEvent = async (
+    evt: React.MouseEvent<HTMLButtonElement>,
+    id: number | undefined
+  ) => {
+    evt.preventDefault();
     try {
       const response = await fetch(`http://127.0.0.1:5000/event/${id}`, {
         method: "DELETE", // Use the appropriate HTTP method
@@ -106,8 +124,25 @@ export default function Events() {
                 query: { id: event.id },
               }}
             >
-              <button onClick={(evt:React.MouseEvent<HTMLButtonElement>) => edit(event,evt)}>edit</button>
-              <button onClick={(evt:React.MouseEvent<HTMLButtonElement>) => removeEvent(evt, event.id)}>-</button>
+              <ButtonsWrapper>
+
+              <ButtonWrapper
+                onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
+                  edit(event, evt)
+                }
+                className="material-symbols-outlined"
+              >
+                edit
+              </ButtonWrapper>
+              <ButtonWrapper
+                onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
+                  removeEvent(evt, event.id)
+                }
+                className="material-symbols-outlined"
+              >
+                delete
+              </ButtonWrapper>
+              </ButtonsWrapper>
 
               <EachEventInfo>
                 <h3>{event.name} </h3>
@@ -121,7 +156,6 @@ export default function Events() {
               <EachEventInfo>Location:{event.location} </EachEventInfo>
               <EachEventInfo>Notes:{event.notes} </EachEventInfo>
             </EachEvent>
-
           ))}
         </TableWrapper>
       ) : null}
