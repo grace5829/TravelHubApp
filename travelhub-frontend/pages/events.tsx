@@ -9,13 +9,11 @@ const TableWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  `;
-  const ButtonWrapper = styled.span`
+`;
+const ButtonWrapper = styled.span`
   display: flex;
   float: right;
-  cursor: wait;
-  z-index:1;
-  
+  z-index: 1;
 `;
 const EachEvent = styled(Link)`
   border-radius: 5px;
@@ -26,23 +24,25 @@ const EachEvent = styled(Link)`
   background: #324a5f;
 
   // &:hover ${ButtonWrapper}{
+
   &:hover {
-    background-color: #5fbbe3;
-      // display: none;
-        // background: #324a5f;
-      
-  
+    background-color: #23336f;
+
   }
 `;
+
 const EachEventInfo = styled.span`
   padding: 2px;
   display: flex;
   justify-content: center;
 `;
 
-
 const ButtonsWrapper = styled.span`
-position:absolute;
+  display: flex;
+  float: right;
+  align-items: center;
+  margin:2px;
+  cursor: pointer;
 `;
 
 export default function Events() {
@@ -111,7 +111,10 @@ export default function Events() {
             method={method}
           />
         ) : (
-          <button onClick={() => addEvent()}> Add Event</button>
+          <ButtonsWrapper onClick={() => addEvent()}>
+            <span className="material-symbols-outlined">calendar_add_on</span>
+            Add Event
+          </ButtonsWrapper>
         )}
       </div>
       {events ? (
@@ -125,23 +128,22 @@ export default function Events() {
               }}
             >
               <ButtonsWrapper>
-
-              <ButtonWrapper
-                onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-                  edit(event, evt)
-                }
-                className="material-symbols-outlined"
-              >
-                edit
-              </ButtonWrapper>
-              <ButtonWrapper
-                onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-                  removeEvent(evt, event.id)
-                }
-                className="material-symbols-outlined"
-              >
-                delete
-              </ButtonWrapper>
+                <ButtonWrapper
+                  onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
+                    edit(event, evt)
+                  }
+                  className="material-symbols-outlined"
+                >
+                  edit
+                </ButtonWrapper>
+                <ButtonWrapper
+                  onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
+                    removeEvent(evt, event.id)
+                  }
+                  className="material-symbols-outlined"
+                >
+                  delete
+                </ButtonWrapper>
               </ButtonsWrapper>
 
               <EachEventInfo>
