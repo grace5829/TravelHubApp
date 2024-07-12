@@ -38,7 +38,7 @@ export default function Tabs({ config }: any) {
     <EventInfoArea>
       <TabsArea>
         {config.map((entry: any, index: any) => (
-          <EachTab onClick={() => setActiveTab(index)}>{entry.header}</EachTab>
+          <EachTab onClick={() => setActiveTab(index)} key={index}>{entry.header}</EachTab>
         ))}
       </TabsArea>
       <BodyArea>{config[activeTab].component}</BodyArea>

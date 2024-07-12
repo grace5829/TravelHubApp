@@ -112,7 +112,7 @@ export default function AllExpenses({ config }: any) {
   };
   return (
     <div>
-      <Heading>{config.title}'s Expenses List</Heading>
+      <Heading>{config.title}&apos;s Expenses List</Heading>
       {sidePanel ? (
         <ExpenseForm
           setHidden={setSidePanel}

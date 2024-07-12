@@ -13,7 +13,6 @@ const TableWrapper = styled.div`
 const ButtonWrapper = styled.span`
   display: flex;
   float: right;
-  z-index: 1;
 `;
 const EachEvent = styled(Link)`
   border-radius: 5px;
@@ -22,12 +21,8 @@ const EachEvent = styled(Link)`
   margin: 8px;
   padding: 5px 10px;
   background: #324a5f;
-
-  // &:hover ${ButtonWrapper}{
-
   &:hover {
     background-color: #23336f;
-
   }
 `;
 
@@ -42,17 +37,11 @@ const ButtonsWrapper = styled.span`
   float: right;
   align-items: center;
   margin:2px;
+  padding:5px;
   cursor: pointer;
 `;
 
 export default function Events() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const day = today.getDate();
-  const startDate = new Date(year, month, day);
-  const endDate = new Date(year, month, day);
-
   const { events, setEvents } = useContext(EventInfoContext);
   const [eventForm, setEventForm] = useState(false);
   const [method, setMethod] = useState("POST");

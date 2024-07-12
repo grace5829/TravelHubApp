@@ -6,8 +6,9 @@ import Link from "next/link";
 const TableWrapper = styled.div`
   margin: 10px;
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   // justify-content: end;
+  flex-direction:column;
   width:50vw;
 `;
 const EachEvent = styled(Link)`
@@ -27,7 +28,6 @@ const EachEvent = styled(Link)`
 const Heading = styled.h2`
   // display: flex;
   float: left;
-
   position: relative;
   left: 0;
   // margin:2px;
@@ -87,6 +87,7 @@ export default function Home() {
 
   return (
     <TableWrapper>
+      <>
       <Heading>Next Event:</Heading>
       {nextEvent ? (
         <EachEvent
@@ -109,8 +110,10 @@ export default function Home() {
           <EachEventInfo>Notes:{nextEvent.notes} </EachEventInfo>
         </EachEvent>
       ) : (
-        <div>"No upcoming events found" </div>
+        <div>No upcoming events found </div>
       )}
+            </>
+<>
       <Heading>Previous Event:</Heading>
 
       {previousEvent ? (
@@ -134,8 +137,10 @@ export default function Home() {
           <EachEventInfo>Notes:{previousEvent.notes} </EachEventInfo>
         </EachEvent>
       ) : (
-        <div>"No previous events found" </div>
+        <div>No previous events found </div>
       )}
+      </>
+
     </TableWrapper>
   );
 }
