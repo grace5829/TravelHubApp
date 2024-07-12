@@ -1,0 +1,12 @@
+{
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "your_database_url",
+    "ANOTHER_ENV_VAR": "value"
+  }
+}
