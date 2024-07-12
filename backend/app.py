@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 db_password = os.getenv("DATABASE_PASSWORD")
+DATABASE_URL = os.getenv("POSTGRESL_URL")
 
 
 app= Flask(__name__)
@@ -20,7 +21,6 @@ db=SQLAlchemy(app)
 CORS(app)
 
 
-DATABASE_URL = os.getenv('POSTGRES_URL')
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -37,6 +37,7 @@ def test_db():
     db = next(get_db())
     result = db.execute('SELECT NOW()').fetchone()
     return jsonify({'time': result[0]})
+
 # to load the db 
 # new terminal, cd to correct folder, type python and enter, run "
 # from app import db,app
