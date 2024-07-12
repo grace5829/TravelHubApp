@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from enum import Enum
 import os
@@ -17,6 +19,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 CORS(app)
 
+
+DATABASE_URL = os.getenv('POSTGRES_URL')
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.route('/test-db')
+def test_db():
+    db = next(get_db())
+    result = db.execute('SELECT NOW()').fetchone()
+    return jsonify({'time': result[0]})
 # to load the db 
 # new terminal, cd to correct folder, type python and enter, run "
 # from app import db,app
