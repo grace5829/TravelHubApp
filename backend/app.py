@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from enum import Enum
 import os
+import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
